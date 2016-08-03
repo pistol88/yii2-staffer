@@ -21,6 +21,7 @@ class m160728_081813_Mass extends Migration {
                 'category_id' => Schema::TYPE_INTEGER . "(10) NOT NULL",
                 'name' => Schema::TYPE_STRING . "(200) NOT NULL",
                 'text' => Schema::TYPE_TEXT . " NOT NULL",
+                'pay_type' => Schema::TYPE_STRING . "(55) NOT NULL",
                 'sort' => Schema::TYPE_INTEGER . "(11)",
                 'status' => Schema::TYPE_STRING . "(55)",
                 ], $tableOptions);

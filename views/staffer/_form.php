@@ -24,11 +24,14 @@ use kartik\select2\Select2;
     </div>
     
     <div class="row">
-        <div class="col-lg-4 col-xs-4">
+        <div class="col-lg-3 col-xs-3">
             <?= $form->field($model, 'name')->textInput() ?>
         </div>
-        <div class="col-lg-4 col-xs-4">
+        <div class="col-lg-3 col-xs-3">
             <?= $form->field($model, 'sort')->textInput() ?>
+        </div>
+        <div class="col-lg-3 col-xs-3">
+            <?= $form->field($model, 'pay_type')->dropDownList(yii::$app->getModule('staffer')->payTypes) ?>
         </div>
     </div>
 
