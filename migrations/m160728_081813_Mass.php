@@ -23,6 +23,7 @@ class m160728_081813_Mass extends Migration {
                 'text' => Schema::TYPE_TEXT . " NOT NULL",
                 'pay_type' => Schema::TYPE_STRING . "(55) NOT NULL",
                 'sort' => Schema::TYPE_INTEGER . "(11)",
+                'persent' => Schema::TYPE_INTEGER . "(5)",
                 'status' => Schema::TYPE_STRING . "(55)",
                 ], $tableOptions);
 

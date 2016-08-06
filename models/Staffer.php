@@ -42,7 +42,7 @@ class Staffer extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['category_id', 'sort'], 'integer'],
+            [['category_id', 'sort', 'persent'], 'integer'],
             [['text', 'status', 'pay_type'], 'string'],
             [['name'], 'string', 'max' => 200],
         ];
@@ -59,6 +59,7 @@ class Staffer extends \yii\db\ActiveRecord
             'name' => 'Название',
             'text' => 'Текст',
             'images' => 'Картинки',
+            'persent' => 'Индивидуальный процент',
             'image' => 'Фото',
             'sort' => 'Сортировка',
         ];

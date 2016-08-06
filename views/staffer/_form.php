@@ -27,16 +27,19 @@ use kartik\select2\Select2;
         <div class="col-lg-3 col-xs-3">
             <?= $form->field($model, 'name')->textInput() ?>
         </div>
-        <div class="col-lg-3 col-xs-3">
+        <div class="col-lg-3 col-xs-2">
             <?= $form->field($model, 'sort')->textInput() ?>
         </div>
-        <div class="col-lg-3 col-xs-3">
+        <div class="col-lg-3 col-xs-2">
             <?= $form->field($model, 'pay_type')->dropDownList(yii::$app->getModule('staffer')->payTypes) ?>
+        </div>
+        <div class="col-lg-3 col-xs-2">
+            <?= $form->field($model, 'persent')->textInput(['type' => 'number']) ?>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-lg-6 col-xs-6">
+        <div class="col-lg-3 col-xs-3">
             <?= $form->field($model, 'category_id')
                 ->widget(Select2::classname(), [
                 'data' => Category::buildTextTree(),
@@ -47,7 +50,7 @@ use kartik\select2\Select2;
                 ],
             ]); ?>
         </div>
-        <div class="col-lg-6 col-xs-6">
+        <div class="col-lg-3 col-xs-3">
             <?= $form->field($model, 'status')
                 ->widget(Select2::classname(), [
                 'data' => $module->stafferStatuses,
