@@ -37,6 +37,7 @@ class m160728_081813_Mass extends Migration {
                 ], $tableOptions);
 
             $this->createIndex('id', '{{%staffer_category}}', 'id,parent_id', 0);
+            $this->createIndex('status', '{{%staffer_staffer}}', 'status', 0);
             
             $this->addForeignKey(
                 'fk_category_id', '{{%staffer_staffer}}', 'category_id', '{{%staffer_category}}', 'id', 'CASCADE', 'CASCADE'
