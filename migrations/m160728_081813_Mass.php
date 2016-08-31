@@ -19,6 +19,7 @@ class m160728_081813_Mass extends Migration {
             $this->createTable('{{%staffer_staffer}}', [
                 'id' => Schema::TYPE_PK . "",
                 'category_id' => Schema::TYPE_INTEGER . "(10) NOT NULL",
+                'user_id' => Schema::TYPE_INTEGER . "(10) NOT NULL",
                 'name' => Schema::TYPE_STRING . "(200) NOT NULL",
                 'text' => Schema::TYPE_TEXT . " NOT NULL",
                 'pay_type' => Schema::TYPE_STRING . "(55) NOT NULL",
@@ -36,11 +37,24 @@ class m160728_081813_Mass extends Migration {
                 'sort' => Schema::TYPE_INTEGER . "(11)",
                 ], $tableOptions);
 
+            $this->createTable('{{%staffer_fine}}', [
+                'id' => Schema::TYPE_PK . "",
+                'staffer_id' => Schema::TYPE_INTEGER . "(11)",
+                'reason' => Schema::TYPE_STRING . "(255) NOT NULL",
+                'sum' => Schema::TYPE_DECIMAL . "  (11, 2)",
+                'comment' => Schema::TYPE_STRING . "(255)",
+                'created_at' => Schema::TYPE_DATETIME,
+                ], $tableOptions);
+
             $this->createIndex('id', '{{%staffer_category}}', 'id,parent_id', 0);
             $this->createIndex('status', '{{%staffer_staffer}}', 'status', 0);
             
             $this->addForeignKey(
                 'fk_category_id', '{{%staffer_staffer}}', 'category_id', '{{%staffer_category}}', 'id', 'CASCADE', 'CASCADE'
+            );
+            
+            $this->addForeignKey(
+                'fk_staffer_id', '{{%staffer_fine}}', 'staffer_id', '{{%staffer_staffer}}', 'id', 'CASCADE', 'CASCADE'
             );
         } catch (Exception $e) {
             echo 'Catch Exception ' . $e->getMessage() . ' ';
@@ -54,7 +68,6 @@ class m160728_081813_Mass extends Migration {
             $this->dropTable('{{%staffer_category}}');
         } catch (Exception $e) {
             echo 'Catch Exception ' . $e->getMessage() . ' ';
-            $transaction->rollBack();
         }
     }
 

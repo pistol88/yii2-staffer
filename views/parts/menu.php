@@ -12,6 +12,10 @@ use yii\bootstrap\Nav;
                 'label' => 'Категории',
                 'url' => ['/staffer/category/index'],
             ],
+            [
+                'label' => 'Штрафы',
+                'url' => ['/staffer/fine/index'],
+            ],
         ],
         'options' => ['class' =>'nav-pills'],
     ]); ?>

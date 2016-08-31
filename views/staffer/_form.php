@@ -4,7 +4,6 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use pistol88\staffer\models\Category;
-use pistol88\staffer\models\Mark;
 use pistol88\gallery\widgets\Gallery;
 use kartik\select2\Select2;
 

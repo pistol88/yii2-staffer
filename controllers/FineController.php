@@ -2,14 +2,14 @@
 namespace pistol88\staffer\controllers;
 
 use yii;
-use pistol88\staffer\models\staffer\StafferSearch;
-use pistol88\staffer\models\Staffer;
+use pistol88\staffer\models\fine\FineSearch;
+use pistol88\staffer\models\Fine;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
-class StafferController extends Controller
+class FineController extends Controller
 {
     public function behaviors()
     {
@@ -27,7 +27,6 @@ class StafferController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
-                    'edittable' => ['post'],
                 ],
             ],
         ];
@@ -35,24 +34,27 @@ class StafferController extends Controller
 
     public function actionIndex()
     {
-        $searchModel = new StafferSearch();
+        $searchModel = new FineSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $model = new Fine;
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'model' => $model,
             'module' => $this->module,
         ]);
     }
 
     public function actionCreate()
     {
-        $model = new Staffer;
+        $model = new Fine;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $module = $this->module;
 
-            return $this->redirect(['update', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -61,6 +63,23 @@ class StafferController extends Controller
         }
     }
 
+    public function actionAjaxCreate()
+    {
+        $model = new Fine();
+
+        $json = [];
+        
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $json['result'] = 'success';
+            $json['id'] = $model->id;
+        } else {
+            $json['result'] = 'fail';
+            $json['errors'] = current($model->getFirstErrors());
+        }
+        
+        return json_encode($json);
+    }
+    
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -92,12 +111,12 @@ class StafferController extends Controller
 
     protected function findModel($id)
     {
-        $model = new Staffer;
+        $model = new Fine;
         
         if (($model = $model::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested staffer does not exist.');
+            throw new NotFoundHttpException('The requested fine does not exist.');
         }
     }
 }

@@ -56,13 +56,27 @@ class Staffer extends \yii\db\ActiveRecord
             'status' => 'Статус',
             'pay_type' => 'Тип выплат',
             'session' => 'Рабочая сессия',
-            'name' => 'Название',
+            'name' => 'Имя',
             'text' => 'Текст',
             'images' => 'Картинки',
             'persent' => 'Индивидуальный процент',
             'image' => 'Фото',
             'sort' => 'Сортировка',
         ];
+    }
+    
+    public function getFines($where = false)
+    {
+        return $this->hasMany(Fine::className(), ['staffer_id' => 'id']);
+    }
+    
+    public function getFinesByDatePeriod($dateStart, $dateStop)
+    {
+        if($dateStop == '0000-00-00 00:00:00' | empty($dateStop)) {
+            $dateStop = date('Y-m-d H:i:s');
+        }
+        
+        return $this->getFines()->where('created_at > :start AND created_at < :stop', [':start' => $dateStart, ':stop' => $dateStop]);
     }
     
     public function getId()

@@ -9,6 +9,7 @@ class Module extends \yii\base\Module
     public $stafferStatuses = ['active' => 'Активный', 'dismissed' => 'Уволенный', 'missing' => 'Пропавший'];
     public $activeStatuses = ['active'];
     public $payTypes = ['base' => 'Базовый'];
+    public $fineReasons = ['Опоздание', 'Не выход на работу', 'Некачественная работа'];
     
     public function init()
     {
