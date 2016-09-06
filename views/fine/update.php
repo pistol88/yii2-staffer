@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
 
-$this->title = 'Редактировать штраф: ' . ' ' . $model->name;
+$this->title = 'Редактировать штраф: ' . ' ' . $model->staffer->name;
 $this->params['breadcrumbs'][] = ['label' => 'Категории', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Редактирование';
 

@@ -10,8 +10,10 @@ use kartik\select2\Select2;
 <div class="fine-form">
 
     <div class="row">
-        <?php $form = ActiveForm::begin(['action' => ['/staffer/fine/create'], 'options' => ['enctype' => 'multipart/form-data']]); ?>
+        <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
+        <input type="hidden" name="backUrl" value="<?=Html::encode(yii::$app->request->referrer);?>" />
+        
         <div class="col-md-6">
             <?= $form->field($model, 'staffer_id')
                 ->widget(Select2::classname(), [

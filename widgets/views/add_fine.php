@@ -18,16 +18,6 @@ use kartik\select2\Select2;
 
     <?php $form = ActiveForm::begin(['action' => ['/staffer/fine/ajax-create'], 'options' => ['enctype' => 'multipart/form-data']]); ?>
         <div class="col-md-6">
-            <?= $form->field($model, 'staffer_id')
-                ->widget(Select2::classname(), [
-                    'data' => ArrayHelper::map(Staffer::find()->all(), 'id', 'name'),
-                    'language' => 'ru',
-                    'options' => ['placeholder' => 'Выберите сотрудника ...'],
-                    'pluginOptions' => [
-                        'allowClear' => true
-                    ],
-                ]); ?>
-
             <?= $form->field($model, 'reason')
                 ->widget(Select2::classname(), [
                     'data' => $module->fineReasons,
@@ -70,12 +60,13 @@ use kartik\select2\Select2;
                     'attribute' => 'reason',
                     'filter' => $module->fineReasons,
                     'content' => function($model) use ($module) {
-                    return $module->fineReasons[$model->reason];
-                }],
+                        return $module->fineReasons[$model->reason];
+                    }
+                ],
                 'sum',
                 'comment',
                 'created_at',
-                ['class' => 'yii\grid\ActionColumn', 'template' => '{update} {delete}',  'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 125px;']],
+                ['class' => 'yii\grid\ActionColumn', 'template' => '{update} {delete}', 'controller' => '/staffer/fine', 'buttonOptions' => ['class' => 'btn btn-default'], 'options' => ['style' => 'width: 125px;']],
             ],
         ]); ?>
     <?php Pjax::end(); ?>

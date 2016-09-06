@@ -87,7 +87,11 @@ class FineController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $module = $this->module;
 
-            return $this->redirect(['update', 'id' => $model->id]);
+            if($backUrl = yii::$app->request->post('backUrl')) {
+                return $this->redirect($backUrl);
+            } else {
+                return $this->redirect(['index']);
+            }
         } else {
             return $this->render('update', ['model' => $model, 'module' => $this->module]);
         }
@@ -106,7 +110,11 @@ class FineController extends Controller
             $this->findModel($id)->delete();
             $module = $this->module;
         }
-        return $this->redirect(['index']);
+        if($backUrl = yii::$app->request->post('backUrl')) {
+            return $this->redirect($backUrl);
+        } else {
+            return $this->redirect(['index']);
+        }
     }
 
     protected function findModel($id)
