@@ -41,7 +41,7 @@ class Staffer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
+            [['name', 'category_id'], 'required'],
             [['category_id', 'sort', 'persent'], 'integer'],
             [['text', 'status', 'pay_type'], 'string'],
             [['name'], 'string', 'max' => 200],
