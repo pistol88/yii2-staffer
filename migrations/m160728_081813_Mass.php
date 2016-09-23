@@ -18,7 +18,7 @@ class m160728_081813_Mass extends Migration {
         try {
             $this->createTable('{{%staffer_staffer}}', [
                 'id' => Schema::TYPE_PK . "",
-                'category_id' => Schema::TYPE_INTEGER . "(10) NOT NULL",
+                'category_id' => Schema::TYPE_INTEGER . "(10)",
                 'user_id' => Schema::TYPE_INTEGER . "(10) NOT NULL",
                 'name' => Schema::TYPE_STRING . "(200) NOT NULL",
                 'text' => Schema::TYPE_TEXT . " NOT NULL",

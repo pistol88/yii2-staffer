@@ -41,8 +41,8 @@ class Staffer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'category_id'], 'required'],
-            [['category_id', 'sort', 'persent'], 'integer'],
+            [['name'], 'required'],
+            [['category_id', 'sort', 'persent', 'fix'], 'integer'],
             [['text', 'status', 'pay_type'], 'string'],
             [['name'], 'string', 'max' => 200],
         ];
@@ -60,6 +60,7 @@ class Staffer extends \yii\db\ActiveRecord
             'text' => 'Текст',
             'images' => 'Картинки',
             'persent' => 'Индивидуальный процент',
+            'fix' => 'Фикс',
             'image' => 'Фото',
             'sort' => 'Сортировка',
         ];
