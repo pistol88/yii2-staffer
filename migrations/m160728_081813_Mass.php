@@ -26,6 +26,9 @@ class m160728_081813_Mass extends Migration {
                 'sort' => Schema::TYPE_INTEGER . "(11)",
                 'persent' => Schema::TYPE_INTEGER . "(5)",
                 'status' => Schema::TYPE_STRING . "(55)",
+				'fix' => Schema::TYPE_INTEGER . "(11)",
+				'updated_at' => Schema::TYPE_TIMESTAMP,
+				'created_at' => Schema::TYPE_TIMESTAMP,
                 ], $tableOptions);
 
             $this->createIndex('category_id', '{{%staffer_staffer}}', 'category_id', 0);

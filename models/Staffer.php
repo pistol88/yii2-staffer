@@ -6,7 +6,9 @@ use yii\helpers\Url;
 use pistol88\staffer\models\Category;
 use pistol88\staffer\models\Price;
 use pistol88\staffer\models\staffer\StafferQuery;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
+use yii\db\Expression;
 
 class Staffer extends \yii\db\ActiveRecord
 {
@@ -21,6 +23,12 @@ class Staffer extends \yii\db\ActiveRecord
             ],
             'session' => [
                 'class' => 'pistol88\worksess\behaviors\AttachSession',
+            ],
+            'timestamp' => [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value' => new Expression('NOW()'),
             ],
         ];
     }
