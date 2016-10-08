@@ -19,6 +19,7 @@ $this->params['breadcrumbs'][] = 'Просмотр';
             'pay_type',
             'text',
             'persent',
+			'fix',
         ],
     ]);?>
     

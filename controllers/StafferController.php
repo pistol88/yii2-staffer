@@ -87,6 +87,7 @@ class StafferController extends Controller
             $this->findModel($id)->delete();
             $module = $this->module;
         }
+		
         return $this->redirect(['index']);
     }
 
