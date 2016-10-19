@@ -31,16 +31,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 ['attribute' => 'id', 'filter' => false, 'options' => ['style' => 'width: 55px;']],
                 'name',
                 [
-                    'attribute' => 'image',
-                    'format' => 'image',
-                    'filter' => false,
-                    'content' => function ($image) {
-                        if($image = $image->getImage()->getUrl('50x50')) {
-                            return "<img src=\"{$image}\" class=\"thumb\" />";
-                        }
-                    }
-                ],
-                [
                     'attribute' => 'parent_id',
                     'filter' => Html::activeDropDownList(
                         $searchModel,

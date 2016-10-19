@@ -23,25 +23,25 @@ use kartik\select2\Select2;
     </div>
     
     <div class="row">
-        <div class="col-md-3 col-xs-3">
+        <div class="col-md-3 col-xs-6">
             <?= $form->field($model, 'name')->textInput() ?>
         </div>
-        <div class="col-md-3 col-xs-2">
+        <div class="col-md-3 col-xs-6">
             <?= $form->field($model, 'sort')->textInput() ?>
         </div>
-        <div class="col-md-3 col-xs-2">
+        <div class="col-md-3 col-xs-6">
             <?= $form->field($model, 'pay_type')->dropDownList(yii::$app->getModule('staffer')->payTypes) ?>
         </div>
-        <div class="col-md-3 col-xs-2">
+        <div class="col-md-3 col-xs-6">
             <?= $form->field($model, 'persent')->textInput(['type' => 'number']) ?>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-3 col-xs-6">
             <?= $form->field($model, 'fix')->textInput(['type' => 'number']) ?>
         </div>
-        <div class="col-md-3 col-xs-3">
+        <div class="col-md-3 col-xs-6">
             <?= $form->field($model, 'category_id')
                 ->widget(Select2::classname(), [
                 'data' => Category::buildTextTree(),
@@ -52,7 +52,7 @@ use kartik\select2\Select2;
                 ],
             ]); ?>
         </div>
-        <div class="col-md-3 col-xs-3">
+        <div class="col-md-3 col-xs-6">
             <?= $form->field($model, 'status')
                 ->widget(Select2::classname(), [
                 'data' => $module->stafferStatuses,
@@ -63,12 +63,45 @@ use kartik\select2\Select2;
                 ],
             ]); ?>
         </div>
+        <div class="col-md-3 col-xs-6">
+            <?= $form->field($model, 'user_id')->textInput(['type' => 'number']) ?>
+        </div>
     </div>
 
     <?= $form->field($model, 'text')->textArea() ?>
 
-    <?php //Gallery::widget(['model' => $model]); ?>
+    <?=Gallery::widget(['model' => $model]); ?>
 
+    <br />
+    
+    <?php if(empty($model->user_id)) { ?>
+        <h3>Создание пользователя</h3>
+        <div class="row">
+            <div class="col-md-3 col-xs-6">
+                <div class="form-group field-user-name">
+                    <label class="control-label" for="user-name">Логин</label>
+                    <input type="text" id="user-name" class="form-control" name="user[login]" value="staffer<?=$model->id;?>" />
+                </div>        
+            </div>
+            <div class="col-md-3 col-xs-6">
+                <div class="form-group field-user-name">
+                    <label class="control-label" for="user-password">Пароль</label>
+                    <input type="text" id="user-password" class="form-control" name="user[password]" value="<?=substr(md5(rand(0, 9999999).'-'.rand(0, 999).$_SERVER['REMOTE_ADDR']), 0, 7);?>" />
+                </div>        
+            </div>
+            <div class="col-md-3 col-xs-6">
+                <div class="form-group field-user-name">
+                    <label class="control-label" for="user-name">Полномочия</label>
+                    <select name="user[roles][]" class="form-control" multiple>
+                        <?php foreach(yii::$app->getModule('staffer')->userRoles as $userRole) { ?>
+                            <option <?php if($userRole == yii::$app->getModule('staffer')->defaultRole) echo 'selected="selected"'; ?>><?=$userRole;?></option>
+                        <?php } ?>
+                    </select>
+                </div>        
+            </div>
+        </div>
+    <?php } ?>
+    
     <div class="form-group staffer-control">
         <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Обновить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         <?php if(!$model->isNewRecord) { ?>

@@ -10,9 +10,6 @@ class Category extends \yii\db\ActiveRecord
 	function behaviors()
     {
         return [
-            'images' => [
-                'class' => 'pistol88\gallery\behaviors\AttachImages',
-            ],
             'field' => [
                 'class' => 'pistol88\field\behaviors\AttachFields',
             ],
@@ -46,7 +43,6 @@ class Category extends \yii\db\ActiveRecord
             'parent_id' => 'Родительская категория',
             'name' => 'Имя категории',
             'text' => 'Описание',
-            'image' => 'Картинка',
             'sort' => 'Сортировка',
             'description' => 'Описание',
         ];

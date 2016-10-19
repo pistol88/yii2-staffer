@@ -3,8 +3,6 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use pistol88\staffer\models\Category;
-use pistol88\worksess\widgets\ControlButton;
-use pistol88\worksess\widgets\Info;
 
 $this->title = 'Сотрудники';
 $this->params['breadcrumbs'][] = $this->title;
@@ -49,14 +47,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 ),
                 'content' => function($model) use ($module) {
                     return @$module->stafferStatuses[$model->status];
-                }
-            ],
-            [
-                'attribute' => 'session',
-                'content' => function($model) use ($module) {
-                    if(in_array($model->status, $module->activeStatuses)) {
-                        return Info::widget(['for' => $model]).ControlButton::widget(['for' => $model]);
-                    }
                 }
             ],
             [

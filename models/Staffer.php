@@ -17,6 +17,7 @@ class Staffer extends \yii\db\ActiveRecord
         return [
             'images' => [
                 'class' => 'pistol88\gallery\behaviors\AttachImages',
+                'mode' => 'single',
             ],
             'field' => [
                 'class' => 'pistol88\field\behaviors\AttachFields',
@@ -50,7 +51,7 @@ class Staffer extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['category_id', 'sort', 'persent', 'fix'], 'integer'],
+            [['category_id', 'sort', 'persent', 'fix', 'user_id'], 'integer'],
             [['text', 'status', 'pay_type'], 'string'],
             [['name'], 'string', 'max' => 200],
         ];
@@ -65,6 +66,7 @@ class Staffer extends \yii\db\ActiveRecord
             'pay_type' => 'Тип выплат',
             'session' => 'Рабочая сессия',
             'name' => 'Имя',
+            'user_id' => 'ID пользователя',
             'text' => 'Текст',
             'images' => 'Картинки',
             'persent' => 'Индивидуальный процент',
@@ -100,5 +102,12 @@ class Staffer extends \yii\db\ActiveRecord
     public function getCategory()
     {
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
+    }
+    
+
+    public function afterSave($insert, $changedAttributes){
+        parent::afterSave($insert, $changedAttributes);
+     
+        yii::$app->getModule('staffer')->registerUser($this);
     }
 }

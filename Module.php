@@ -10,9 +10,23 @@ class Module extends \yii\base\Module
     public $activeStatuses = ['active'];
     public $payTypes = ['base' => 'Базовый'];
     public $fineReasons = ['Опоздание', 'Не выход на работу', 'Некачественная работа'];
+    public $registerUserCallback = null; //Callback функция регистрации сотрудника в системе
+    public $userRoles = ['staffer', 'user', 'administrator', 'superadmin'];
+    public $defaultRole = 'staffer'; 
     
     public function init()
     {
         parent::init();
+    }
+    
+    public function registerUser(models\Staffer $staffer)
+    {
+        if(is_callable($this->registerUserCallback)) {
+            $registerUserCallback = $this->registerUserCallback;
+            
+            return $registerUserCallback($staffer);
+        }
+        
+        return false;
     }
 }
