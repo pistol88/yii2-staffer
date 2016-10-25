@@ -3,6 +3,7 @@ namespace pistol88\staffer\models;
 
 use yii;
 use pistol88\worksess\models\Session;
+use pistol88\staffer\models\Staffer;
 
 class Payment extends \yii\db\ActiveRecord
 {
@@ -55,4 +56,10 @@ class Payment extends \yii\db\ActiveRecord
 
         return parent::beforeSave($insert);
     }
+
+    public function getWorker()
+    {
+        return $this->hasOne(Staffer::className(), ['id' => 'worker_id']);
+    }
+
 }
