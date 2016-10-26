@@ -3,11 +3,10 @@ if (typeof halumein == "undefined" || !halumein) {
 }
 halumein.payment = {
     init: function() {
-        console.log('halumein staffer payment init');
+        // console.log('halumein staffer payment init');
 
         var $makePaymentButton = $('[data-role=makePayment]');
         var $removePaymentButton = $('[data-role=cancelPayment]');
-
 
         $makePaymentButton.on('click', function() {
             var self = this,
@@ -44,14 +43,14 @@ halumein.payment = {
             data: {stafferId: stafferId, sum: sum, sessionId : sessionId},
             success : function(response) {
                 if (response.status == 'success') {
-                    // console.log(response);
                     location.reload();
                 } else {
                     console.log('error');
                 }
             },
             fail : function() {
-                console.log('fail');
+                alert('Не удалось произвести выплату.');
+
             }
         });
     },
@@ -61,14 +60,12 @@ halumein.payment = {
             url: url,
             data: {paymentId : paymentId},
             success: function(response) {
-                console.log(response);
                 if (response.status == 'success') {
-                    console.log(response);
                     $block.fadeOut();
                 }
             },
             fail: function() {
-                console.log('fail');
+                alert('Не удалось отменить выплату.');
             }
         });
     }

@@ -41,7 +41,7 @@
                             </td>
                             <td>
                                 <span class="glyphicon glyphicon-remove cancel-payment"
-                                    data-url=<?= Url::to(['/staffer/payment/remove']) ?>
+                                    data-url=<?= Url::to(['/staffer/payment/remove-ajax']) ?>
                                     data-role="cancelPayment"
                                     data-payment-id=<?=$payment->id ?>>
                                 </span>
@@ -69,7 +69,7 @@
                 <div class="btn btn-success" style="width:250px;"
                     data-role="makePayment"
                     data-session-id=<?= $sessionId ?>
-                    data-url="<?= Url::to(['/staffer/payment/add'])?>",
+                    data-url="<?= Url::to(['/staffer/payment/add-ajax'])?>",
                     data-staffer-id=<?= $staffer->id ?>>
                     Выплатить
                 </div>

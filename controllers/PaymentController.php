@@ -38,7 +38,7 @@ class PaymentController extends Controller
         echo 'test';
     }
 
-    public function actionAdd()
+    public function actionAddAjax()
     {
 
         $data = yii::$app->request->post();
@@ -64,7 +64,7 @@ class PaymentController extends Controller
         }
     }
 
-    public function actionRemove()
+    public function actionRemoveAjax()
     {
         $paymentId = (int)yii::$app->request->post('paymentId');
 

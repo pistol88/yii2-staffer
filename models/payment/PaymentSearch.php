@@ -4,7 +4,7 @@ namespace pistol88\staffer\models\payment;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use pistol88\service\models\Payment;
+use pistol88\staffer\models\Payment;
 
 class PaymentSearch extends Payment
 {
