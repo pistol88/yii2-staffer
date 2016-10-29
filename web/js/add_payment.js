@@ -8,6 +8,13 @@ halumein.payment = {
         var $makePaymentButton = $('[data-role=makePayment]');
         var $removePaymentButton = $('[data-role=cancelPayment]');
 
+        $(document).find('.staffer-payment-modal').on('shown.bs.modal', function() {
+            var self = this;
+            $(self).find('[data-role=sumInput]').focus().select();
+
+            console.log(this);
+        });
+
         $makePaymentButton.on('click', function() {
             var self = this,
                 url = $(self).data('url'),

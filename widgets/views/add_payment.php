@@ -9,7 +9,7 @@
 </button>
 
 <!-- Modal -->
-<div id="modal-<?= $staffer->id ?>" class="modal fade" role="dialog">
+<div id="modal-<?= $staffer->id ?>" class="modal fade staffer-payment-modal"role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
