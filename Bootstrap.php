@@ -13,5 +13,11 @@ class Bootstrap implements BootstrapInterface
                 'class' => '\kartik\grid\Module',
             ]);
         }
+        
+        if(!$app->has('staffer')) {
+            $app->set('staffer', [
+                'class' => '\pistol88\staffer\Staffer',
+            ]);
+        }
     }
 }
