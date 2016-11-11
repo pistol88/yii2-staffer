@@ -11,7 +11,7 @@ class StafferSearch extends Staffer
     public function rules()
     {
         return [
-            [['id', 'category_id'], 'integer'],
+            [['id', 'category_id', 'organisation_id'], 'integer'],
             [['name', 'text', 'status'], 'safe'],
         ];
     }
@@ -47,6 +47,7 @@ class StafferSearch extends Staffer
         $query->andFilterWhere([
             'id' => $this->id,
             'category_id' => $this->category_id,
+            'organisation_id' => $this->organisation_id,
             'status' => $this->status,
         ]);
 

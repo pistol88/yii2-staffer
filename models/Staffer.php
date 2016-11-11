@@ -51,7 +51,7 @@ class Staffer extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['category_id', 'sort', 'persent', 'fix', 'user_id'], 'integer'],
+            [['category_id', 'sort', 'persent', 'fix', 'user_id', 'organisation_id'], 'integer'],
             [['text', 'status', 'pay_type'], 'string'],
             [['name'], 'string', 'max' => 200],
         ];
@@ -73,6 +73,7 @@ class Staffer extends \yii\db\ActiveRecord
             'fix' => 'Фикс',
             'image' => 'Фото',
             'sort' => 'Сортировка',
+            'organisation_id' => 'Организация',
         ];
     }
     
@@ -103,7 +104,6 @@ class Staffer extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
-    
 
     public function afterSave($insert, $changedAttributes){
         parent::afterSave($insert, $changedAttributes);

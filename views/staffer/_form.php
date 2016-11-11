@@ -67,6 +67,14 @@ use kartik\select2\Select2;
             <?= $form->field($model, 'user_id')->textInput(['type' => 'number']) ?>
         </div>
     </div>
+    
+    <div class="row">
+        <div class="col-md-3 col-xs-6">
+            <?php if($organisation = yii::$app->get('organisation')) { ?>
+                <?php echo $form->field($model, 'organisation_id')->dropDownList(array_merge(['0' => 'Нет'], ArrayHelper::map($organisation->getList(), 'id', 'name'))) ?>
+            <?php } ?>
+        </div>
+    </div>
 
     <?= $form->field($model, 'text')->textArea() ?>
 
