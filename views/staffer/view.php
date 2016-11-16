@@ -26,7 +26,8 @@ $this->params['breadcrumbs'][] = 'Просмотр';
     <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#staffer-more">Дополнительно</a></li>
         <?php if(class_exists('\pistol88\staffer\widgets\AddFine')) { ?><li><a data-toggle="tab" href="#staffer-fines">Штрафы</a></li><?php } ?>
-        <?php if(class_exists('\pistol88\service\widgets\WorkerPayments')) { ?><li><a data-toggle="tab" href="#staffer-payments">Выплаты</a></li><?php } ?>
+        <?php if(class_exists('\pistol88\staffer\widgets\WorkerPayments')) { ?><li><a data-toggle="tab" href="#staffer-payments">Выплаты</a></li><?php } ?>
+        <?php if(class_exists('\pistol88\staffer\widgets\WorkerSalary')) { ?><li><a data-toggle="tab" href="#staffer-salary">Зарплаты</a></li><?php } ?>
     </ul>
 
     <div class="tab-content" style="padding: 10px;">
@@ -45,6 +46,11 @@ $this->params['breadcrumbs'][] = 'Просмотр';
         <?php if(class_exists('\pistol88\service\widgets\WorkerPayments')) { ?>
             <div id="staffer-payments" class="tab-pane fade">
                 <?=\pistol88\staffer\widgets\WorkerPayments::widget(['worker_id' => $model->id]);?>
+            </div>
+        <?php } ?>
+        <?php if(class_exists('\pistol88\staffer\widgets\WorkerSalary')) { ?>
+            <div id="staffer-salary" class="tab-pane fade">
+                <?=\pistol88\staffer\widgets\WorkerSalary::widget(['workerId' => $model->id]);?>
             </div>
         <?php } ?>
     </div>
