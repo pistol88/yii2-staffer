@@ -12,11 +12,16 @@ use yii\widgets\Pjax;
     <?php Pjax::begin(); ?>
     <?php echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        // 'filterModel' => $searchModel,
         'columns' => [
-            ['attribute' => 'id', 'filter' => false, 'options' => ['style' => 'width: 49px;']],
+            // ['attribute' => 'id', 'filter' => false, 'options' => ['style' => 'width: 49px;']],
+            [
+                'attribute' => 'date',
+                'value' => function($model) {
+                    return  date('d.m.Y H:i:s', strtotime($model->date));
+                }
+            ],
             ['attribute' => 'sum', 'filter' => false, 'label' => 'Выплачено'],
-            'date',
             [
                 'attribute' => 'session_id',
                 'filter' => false,

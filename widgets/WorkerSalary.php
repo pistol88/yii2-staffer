@@ -9,7 +9,7 @@ use yii;
 
 class WorkerSalary extends \yii\base\Widget
 {
-    public $workerId = null;
+    public $worker = null;
 
     public function init()
     {
@@ -20,14 +20,28 @@ class WorkerSalary extends \yii\base\Widget
 
     public function run()
     {
-        $sessionsQuery = \Yii::$app->worksess->getUserSessions($this->workerId);
+        $sessionsQuery = \Yii::$app->worksess->getUserSessions($this->worker->id);
+
+        if ($dateStart = \Yii::$app->request->get('date_start')) {
+            $sessionsQuery->andWhere(['>=', 'start', date('Y-m-d', strtotime($dateStart))]);
+        }
+
+        if ($dateStop = \Yii::$app->request->get('date_stop')) {
+            $sessionsQuery->andWhere(['<=', 'start', date('Y-m-d H:i:s', strtotime($dateStop) + 86399)]);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $sessionsQuery,
+            'sort' => ['defaultOrder'=> ['id' => SORT_DESC]],
+            'pagination' => [
+                'pageSize' => 50,
+            ],
+
         ]);
 
         return $this->render('worker_salary', [
-            'dataProvider' => $dataProvider
+            'dataProvider' => $dataProvider,
+            'worker' => $this->worker
         ]);
     }
 }

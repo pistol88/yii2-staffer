@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = 'Просмотр';
         <?php } ?>
         <?php if(class_exists('\pistol88\staffer\widgets\WorkerSalary')) { ?>
             <div id="staffer-salary" class="tab-pane fade">
-                <?=\pistol88\staffer\widgets\WorkerSalary::widget(['workerId' => $model->id]);?>
+                <?=\pistol88\staffer\widgets\WorkerSalary::widget(['worker' => $model]);?>
             </div>
         <?php } ?>
     </div>

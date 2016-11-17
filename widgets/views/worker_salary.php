@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\GridView;
+use nex\datepicker\DatePicker;
 use yii\widgets\Pjax;
 use pistol88\staffer\models\Staffer;
 
@@ -17,13 +18,211 @@ $(function () {
 SCRIPT;
 $this->registerJs($js);
 
+if($dateStart = yii::$app->request->get('date_start')) {
+    $dateStart = date('d.m.Y', strtotime($dateStart));
+}
+
+if($dateStop = yii::$app->request->get('date_stop')) {
+    $dateStop = date('d.m.Y', strtotime($dateStop));
+}
+
 ?>
 <div class="worker-payments-widget">
+
+    <?php Pjax::begin(); ?>
+
+    <div class="filter">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Фильтр</h3>
+            </div>
+            <div class="panel-body">
+                <form action="" class="row search" data-pjax="true">
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <?= DatePicker::widget([
+                                    'name' => 'date_start',
+                                    'addon' => false,
+                                    'value' => $dateStart,
+                                    'size' => 'sm',
+                                    'language' => 'ru',
+                                    'placeholder' => yii::t('order', 'Date from'),
+                                    'clientOptions' => [
+                                        'format' => 'L',
+                                        'minDate' => '2015-01-01',
+                                        'maxDate' => date('Y-m-d'),
+                                    ],
+                                    'dropdownItems' => [
+                                        ['label' => 'Yesterday', 'url' => '#', 'value' => \Yii::$app->formatter->asDate('-1 day')],
+                                        ['label' => 'Tomorrow', 'url' => '#', 'value' => \Yii::$app->formatter->asDate('+1 day')],
+                                        ['label' => 'Some value', 'url' => '#', 'value' => 'Special value'],
+                                    ],
+                                ]);?>
+                            </div>
+                            <div class="col-md-6">
+                                <?= DatePicker::widget([
+                                    'name' => 'date_stop',
+                                    'addon' => false,
+                                    'value' => $dateStop,
+                                    'size' => 'sm',
+                                    'placeholder' => yii::t('order', 'Date to'),
+                                    'language' => 'ru',
+                                    'clientOptions' => [
+                                        'format' => 'L',
+                                        'minDate' => '2015-01-01',
+                                        'maxDate' => date('Y-m-d'),
+                                    ],
+                                    'dropdownItems' => [
+                                        ['label' => yii::t('order', 'Yesterday'), 'url' => '#', 'value' => \Yii::$app->formatter->asDate('-1 day')],
+                                        ['label' => yii::t('order', 'Tomorrow'), 'url' => '#', 'value' => \Yii::$app->formatter->asDate('+1 day')],
+                                        ['label' => yii::t('order', 'Some value'), 'url' => '#', 'value' => 'Special value'],
+                                    ],
+                                ]);?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <input class="form-control btn-success" type="submit" value="<?=Yii::t('order', 'Search');?>" />
+                    </div>
+                    <div class="col-md-3">
+                        <a class="btn btn-default" href="<?= Url::to(['/staffer/staffer/view', 'id' => $worker->id]) ?>" />Cбросить все фильтры</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="summary">
-        Всего:
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Итого</h3>
+            </div>
+            <div class="panel-body">
+                <?php if (count($models) > 0) {
+                    if(!($fix = $worker->fix)) {
+                        $fix = 0;
+                    }
+
+                    $totalTimeElapsed = 0; // всего отработано за период
+
+                    // заработано
+                    $totalBaseSalary = 0; // всего грязными за период
+                    $totalFix = 0; // всего по фиксу за период
+                    $totalFines = 0; // всего по штрафам за период
+                    $totalBonuses = 0; // всего по бонусам за период
+                    $totalSalary = 0; // всего чистыми за период
+
+                    // выплачено
+                    $totalPayed = 0;
+
+                    $sessions = [];
+                    foreach ($models as $key => $model) {
+                        $sessionStatistic = \Yii::$app->service->getReportBySession($model->session);
+
+                        $sessions[] = [
+                            'model' => $model,
+                            'statistic' => $sessionStatistic
+                        ];
+
+                        $payments = \Yii::$app->staffer->getStafferPaymentsBySession($model->user_id, $model->session->id);
+
+                        //  время на смене
+                        if (!is_null($model->stop_timestamp)) {
+                            $totalTimeElapsed += $model->stop_timestamp - $model->start_timestamp;
+                        } else {
+                            $totalTimeElapsed += time() - $model->start_timestamp;
+                        }
+
+                        //  заработано
+                        $totalBaseSalary += $sessionStatistic['salary'][$model->user_id]['base_salary'];
+                        $totalFix += $fix;
+                        $totalFines += $sessionStatistic['salary'][$model->user_id]['fines'];
+                        $totalBonuses += $sessionStatistic['salary'][$model->user_id]['bonuses'];
+
+                        $totalSalary += $sessionStatistic['salary'][$model->user_id]['salary'];
+
+                        // выплачено
+                        if ($payed = $payments->sum('sum')) {
+                            $totalPayed += $payed;
+                        }
+                    }
+
+                    // $day = ( $totalTimeElapsed / 86400 ) % 30;
+                    $hour = ( $totalTimeElapsed / 3600 ) % 3600;
+                    $min = ( $totalTimeElapsed / 60 ) % 60;
+
+                    $totalTimeElapsedString = '';
+                    // $totalTimeElapsedString .= $day > 0 ? 'Дней: '. $day . ' ' : '' ;
+                    $totalTimeElapsedString .= $hour > 0 ? 'Часов: '. $hour . ' ' : '' ;
+                    $totalTimeElapsedString .= $min > 0 ? 'Минут: '. $min . ' ' : 'Минут: 0' ;
+                    ?>
+
+                    <p>
+                        Отработано за период: <?= $totalTimeElapsedString ?>. Всего смен за период: <?= count($models) ?>
+                    </p>
+                    <p>
+                        Заработано:
+                    </p>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>
+                                    Начислено
+                                </td>
+                                <td>
+                                    <?= number_format(round(($totalBaseSalary), 0, PHP_ROUND_HALF_DOWN), 2, ',', ' ') ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Фикс
+                                </td>
+                                <td>
+                                    <?= number_format(round(($totalFix), 0, PHP_ROUND_HALF_DOWN), 2, ',', ' ') ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Штрафы
+                                </td>
+                                <td>
+                                    <?= number_format(round(($totalFines), 0, PHP_ROUND_HALF_DOWN), 2, ',', ' ') ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Бонусы
+                                </td>
+                                <td>
+                                    <?= number_format(round(($totalBonuses), 0, PHP_ROUND_HALF_DOWN), 2, ',', ' ') ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    К выплате
+                                </td>
+                                <td>
+                                    <?= number_format(round(($totalSalary), 0, PHP_ROUND_HALF_DOWN), 2, ',', ' ') ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Осталось выплатить
+                                </td>
+                                <td>
+                                    <?= number_format(round(($totalSalary - $totalPayed), 0, PHP_ROUND_HALF_DOWN), 2, ',', ' ') ?>
+                                </td>
+                            </tr>
+                        </table>
+                        <p>
+                            Выплачено за период: <?= number_format(round(($totalPayed), 0, PHP_ROUND_HALF_DOWN), 2, ',', ' ') ?>
+                        </p>
+                 <?php } ?>
+            </div>
+        </div>
 
     </div>
-    <?php Pjax::begin(); ?>
 
     <table class="table table-bordered">
         <tr>
@@ -47,10 +246,11 @@ $this->registerJs($js);
             </th>
         </tr>
 
-        <?php if (count($models) > 0) { ?>
-            <?php foreach ($models as $key => $model) { ?>
+        <?php if (count($sessions) > 0) { ?>
+            <?php foreach ($sessions as $key => $session) { ?>
                 <?php
-                    $sessionStatistic = \Yii::$app->service->getReportBySession($model->session);
+                    $model = $session['model'];
+                    $sessionStatistic = $session['statistic'];
                     $payments = \Yii::$app->staffer->getStafferPaymentsBySession($model->user_id, $model->session->id);
                 ?>
                 <tr>
@@ -82,11 +282,11 @@ $this->registerJs($js);
                     <td>
                         <!-- заработано -->
                         <?php $tooltip = '<p>Грязные: '.$sessionStatistic['salary'][$model->user_id]['base_salary'].'</p>'
-                             . '<p>Фикс: '.$sessionStatistic['salary'][$model->user_id]->fix.'</p>'
+                             . '<p>Фикс: '.$fix.'</p>'
                              . '<p>Штрафы: '.$sessionStatistic['salary'][$model->user_id]['fines'].'</p>'
                              . '<p>Бонусы: '.$sessionStatistic['salary'][$model->user_id]['bonuses'].'</p>';
 
-                            echo Html::tag('a', number_format(round(($sessionStatistic['salary'][$model->user_id]['salary']), 0, PHP_ROUND_HALF_DOWN), 2, ',', '.'), [
+                            echo Html::tag('a', number_format(round(($sessionStatistic['salary'][$model->user_id]['salary']), 0, PHP_ROUND_HALF_DOWN), 2, ',', ' '), [
                                 'data-template' => '<div class="popover" role="tooltip"><div class="popover-arrow"></div><div class="popover-content"></div></div>',
                                 'data-title' => 'Заработано',
                                 'data-html' => 'true',
@@ -95,7 +295,7 @@ $this->registerJs($js);
                                 'data-placement' => 'top',
                                 'tabindex' => '0',
                                 'data-trigger' => 'focus',
-                                'style' => 'text-decoration: underline; cursor:pointer;'
+                                'style' => 'cursor:pointer;'
                             ]);
                         ?>
                     </td>
@@ -111,7 +311,8 @@ $this->registerJs($js);
                     </td>
                     <td>
                         <!-- к выплате -->
-                        <?= round($sessionStatistic['salary'][$model->user_id]['salary'], 0, PHP_ROUND_HALF_DOWN) - $payed; ?>
+                        <?php  echo round($sessionStatistic['salary'][$model->user_id]['salary'], 0, PHP_ROUND_HALF_DOWN) - $payed; ?>
+                        <?php // echo $sessionStatistic['salary'][$model->user_id]['salary'] - $payed; ?>
                     </td>
                     <td>
                         <!-- кнопка выплатить -->
@@ -133,132 +334,9 @@ $this->registerJs($js);
         </tr>
     </table>
 
-    <?php /*
-    echo GridView::widget([
-        'dataProvider' => $dataProvider,
-        // 'filterModel' => $searchModel,
-        'columns' => [
-            ['attribute' => 'id', 'filter' => false, 'options' => ['style' => 'width: 49px;']],
-            [
-                'label' => 'Дата смены',
-                'format' => 'raw',
-                'value' => function($model) {
-                    return "<a href=". Url::to(['/service/report/index', 'sessionId' => $model->session_id]) .">". date('d.m.Y', $model->start_timestamp). "</a>";
-                },
-                'options' => ['style' => 'width: 120px;']
-            ],
-            [
-                'label' => 'Время на смене',
-                'value' => function($model) {
-                    if (!is_null($model->stop_timestamp)) {
-                        $timeElapsed = $model->stop_timestamp - $model->start_timestamp;
-                    } else {
-                        $timeElapsed = time() - $model->start_timestamp;
-                    }
-
-                    $day = ( $timeElapsed / 86400 ) % 30;
-                    $hour = ( $timeElapsed / 3600 ) % 24;
-                    $min = ( $timeElapsed / 60 ) % 60;
-
-                    $return = '';
-                    $return .= $day > 0 ? 'Дней: '. $day . ' ' : '' ;
-                    $return .= $hour > 0 ? 'Часов: '. $hour . ' ' : '' ;
-                    $return .= $min > 0 ? 'Минут: '. $min . ' ' : 'Минут: 0' ;
-                    return $return;
-
-                }
-            ],
-            [
-                'label' => 'Заработано',
-                'format' => 'raw',
-                'value' => function($model) {
-                    $sessionStatistic = \Yii::$app->service->getReportBySession($model->session);
-
-                    $tooltip = '<p>Грязные: '.$sessionStatistic['salary'][$model->user_id]['base_salary'].'</p>'
-                     . '<p>Фикс: '.$sessionStatistic['salary'][$model->user_id]->fix.'</p>'
-                     . '<p>Штрафы: '.$sessionStatistic['salary'][$model->user_id]['fines'].'</p>'
-                     . '<p>Бонусы: '.$sessionStatistic['salary'][$model->user_id]['bonuses'].'</p>';
-
-                    return Html::tag('a', $sessionStatistic['salary'][$model->user_id]['salary'], [
-                        'data-template' => '<div class="popover" role="tooltip"><div class="popover-arrow"></div><div class="popover-content"></div></div>',
-                        'data-title' => 'Заработано',
-                        'data-html' => 'true',
-                        'data-content' => $tooltip,
-                        'data-toggle' => 'popover',
-                        'data-placement' => 'top',
-                        'tabindex' => '0',
-                        'data-trigger' => 'focus',
-                        'style' => 'text-decoration: underline; cursor:pointer;'
-                    ]);
-                }
-            ],
-            [
-                'label' => 'Выплачено',
-                'value' => function($model) {
-                    $payments = \Yii::$app->staffer->getStafferPaymentsBySession($model->user_id, $model->session->id);
-                    if ($payed = $payments->sum('sum')) {
-                        return $payed;
-                    } else {
-                        return 'выплат не было';
-                    }
-                }
-            ],
-            [
-                'label' => 'К выплате',
-                'format' => 'raw',
-                'value' => function($model) {
-                    // $sessionStatistic = \Yii::$app->service->getReportBySession($model->session);
-                    //
-                    // $payments = \Yii::$app->staffer->getStafferPaymentsBySession($model->user_id, $model->session->id);
-                    // $payed = $payments->sum('sum');
-                    //
-                    // return $sessionStatistic['salary'][$model->user_id]['salary'] - $payed;
-
-                }
-            ],
-            [
-                'format' => 'raw',
-                'value' => function($model) {
-                    $sessionStatistic = \Yii::$app->service->getReportBySession($model->session);
-
-                    $payments = \Yii::$app->staffer->getStafferPaymentsBySession($model->user_id, $model->session->id);
-                    $payed = $payments->sum('sum');
-
-                    if($sessionStatistic['salary'][$model->user_id]['salary'] > 0) {
-                        return \pistol88\staffer\widgets\AddPayment::widget([
-                            'staffer' => Staffer::findOne($model->user_id),
-                            'paymentSum' => round(($sessionStatistic['salary'][$model->user_id]['salary'] - $payed), 0, PHP_ROUND_HALF_DOWN),
-                            'sessionId' => $model->session->id
-                        ]);
-                    }
-                }
-            ]
-            // [
-            //     'label' => 'Долг',
-            //     'content' => function($model) {
-            //
-            //         $sessionStatistic = \Yii::$app->service->getReportBySession($model->session);
-            //         return $sessionStatistic['salary'][$model->worker_id]['salary'] - $model->sum;
-            //     }
-            // ],
-            // 'date',
-            // [
-            //     'attribute' => 'session_id',
-            //     'filter' => false,
-            //     'content' => function($model) {
-            //         return "<a href=". Url::to(['/service/report/index', 'sessionId' => $model->session_id]) .">". date('d.m.Y', $model->session->start_timestamp). "</a>";
-            //     }
-            // ],
-            // [
-            //     'label' => 'Заработано за сессию',
-            //     'content' => function($model) {
-            //
-            //         $sessionStatistic = \Yii::$app->service->getReportBySession($model->session);
-            //         return$sessionStatistic['salary'][$model->worker_id]['salary'];
-            //     }
-            // ],
-        ],
-    ]); */ ?>
+    <?= \yii\widgets\LinkPager::widget([
+        'pagination'=>$dataProvider->pagination,
+    ]); ?>
 
     <?php Pjax::end(); ?>
 </div>
