@@ -105,7 +105,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                         $fix = 0;
                     }
 
-                    $totalTimeElapsed = 0; // всего отработано за период
+                    //$totalTimeElapsed = 0; // всего отработано за период
 
                     // заработано
                     $totalBaseSalary = 0; // всего грязными за период
@@ -117,31 +117,24 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                     // выплачено
                     $totalPayed = 0;
 
-                    $sessions = [];
                     foreach ($models as $key => $model) {
-                        $sessionStatistic = \Yii::$app->service->getReportBySession($model->session);
 
-                        $sessions[] = [
-                            'model' => $model,
-                            'statistic' => $sessionStatistic
-                        ];
-
-                        $payments = \Yii::$app->staffer->getStafferPaymentsBySession($model->user_id, $model->session->id);
+                        $payments = \Yii::$app->staffer->getStafferPaymentsBySession($model->worker_id, $model->session_id);
 
                         //  время на смене
-                        if (!is_null($model->stop_timestamp)) {
-                            $totalTimeElapsed += $model->stop_timestamp - $model->start_timestamp;
-                        } else {
-                            $totalTimeElapsed += time() - $model->start_timestamp;
-                        }
+                        // if (!is_null($model->stop_timestamp)) {
+                        //     $totalTimeElapsed += $model->stop_timestamp - $model->start_timestamp;
+                        // } else {
+                        //     $totalTimeElapsed += time() - $model->start_timestamp;
+                        // }
 
                         //  заработано
-                        $totalBaseSalary += $sessionStatistic['salary'][$model->user_id]['base_salary'];
+                        $totalBaseSalary += $model->charged;
                         $totalFix += $fix;
-                        $totalFines += $sessionStatistic['salary'][$model->user_id]['fines'];
-                        $totalBonuses += $sessionStatistic['salary'][$model->user_id]['bonuses'];
+                        $totalFines += $model->fines;
+                        $totalBonuses += $model->bonuses;
 
-                        $totalSalary += $sessionStatistic['salary'][$model->user_id]['salary'];
+                        $totalSalary += $model->salary;
 
                         // выплачено
                         if ($payed = $payments->sum('sum')) {
@@ -150,17 +143,18 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                     }
 
                     // $day = ( $totalTimeElapsed / 86400 ) % 30;
-                    $hour = ( $totalTimeElapsed / 3600 ) % 3600;
-                    $min = ( $totalTimeElapsed / 60 ) % 60;
+                    // $hour = ( $totalTimeElapsed / 3600 ) % 3600;
+                    // $min = ( $totalTimeElapsed / 60 ) % 60;
 
-                    $totalTimeElapsedString = '';
+                    // $totalTimeElapsedString = '';
                     // $totalTimeElapsedString .= $day > 0 ? 'Дней: '. $day . ' ' : '' ;
-                    $totalTimeElapsedString .= $hour > 0 ? 'Часов: '. $hour . ' ' : '' ;
-                    $totalTimeElapsedString .= $min > 0 ? 'Минут: '. $min . ' ' : 'Минут: 0' ;
+                    // $totalTimeElapsedString .= $hour > 0 ? 'Часов: '. $hour . ' ' : '' ;
+                    // $totalTimeElapsedString .= $min > 0 ? 'Минут: '. $min . ' ' : 'Минут: 0' ;
                     ?>
 
                     <p>
-                        Отработано за период: <?= $totalTimeElapsedString ?>. Всего смен за период: <?= count($models) ?>
+                        <!-- Отработано за период: <?php // echo $totalTimeElapsedString ?>. -->
+                        Всего смен за период: <?= count($models) ?>
                     </p>
                     <p>
                         Заработано:
@@ -171,7 +165,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                                     Начислено
                                 </td>
                                 <td>
-                                    <?= number_format(round(($totalBaseSalary), 0, PHP_ROUND_HALF_DOWN), 2, ',', ' ') ?>
+                                    <?= number_format($totalBaseSalary, 2, ',', ' ') ?>
                                 </td>
                             </tr>
                             <tr>
@@ -179,7 +173,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                                     Фикс
                                 </td>
                                 <td>
-                                    <?= number_format(round(($totalFix), 0, PHP_ROUND_HALF_DOWN), 2, ',', ' ') ?>
+                                    <?= number_format($totalFix, 2, ',', ' ') ?>
                                 </td>
                             </tr>
                             <tr>
@@ -187,7 +181,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                                     Штрафы
                                 </td>
                                 <td>
-                                    <?= number_format(round(($totalFines), 0, PHP_ROUND_HALF_DOWN), 2, ',', ' ') ?>
+                                    <?= number_format($totalFines, 2, ',', ' ') ?>
                                 </td>
                             </tr>
                             <tr>
@@ -195,7 +189,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                                     Бонусы
                                 </td>
                                 <td>
-                                    <?= number_format(round(($totalBonuses), 0, PHP_ROUND_HALF_DOWN), 2, ',', ' ') ?>
+                                    <?= number_format($totalBonuses, 2, ',', ' ') ?>
                                 </td>
                             </tr>
                             <tr>
@@ -203,7 +197,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                                     К выплате
                                 </td>
                                 <td>
-                                    <?= number_format(round(($totalSalary), 0, PHP_ROUND_HALF_DOWN), 2, ',', ' ') ?>
+                                    <?= number_format($totalSalary, 2, ',', ' ') ?>
                                 </td>
                             </tr>
                             <tr>
@@ -211,12 +205,12 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                                     Осталось выплатить
                                 </td>
                                 <td>
-                                    <?= number_format(round(($totalSalary - $totalPayed), 0, PHP_ROUND_HALF_DOWN), 2, ',', ' ') ?>
+                                    <?= number_format(($totalSalary - $totalPayed), 2, ',', ' ') ?>
                                 </td>
                             </tr>
                         </table>
                         <p>
-                            Выплачено за период: <?= number_format(round(($totalPayed), 0, PHP_ROUND_HALF_DOWN), 2, ',', ' ') ?>
+                            Выплачено за период: <?= number_format($totalPayed, 2, ',', ' ') ?>
                         </p>
                  <?php } ?>
             </div>
@@ -246,25 +240,23 @@ if($dateStop = yii::$app->request->get('date_stop')) {
             </th>
         </tr>
 
-        <?php if (count($sessions) > 0) { ?>
-            <?php foreach ($sessions as $key => $session) { ?>
+        <?php if (count($models) > 0) { ?>
+            <?php foreach ($models as $key => $model) { ?>
                 <?php
-                    $model = $session['model'];
-                    $sessionStatistic = $session['statistic'];
-                    $payments = \Yii::$app->staffer->getStafferPaymentsBySession($model->user_id, $model->session->id);
+                    $payments = \Yii::$app->staffer->getStafferPaymentsBySession($model->worker_id, $model->session->id);
                 ?>
                 <tr>
                     <td>
-                        <a href="<?=Url::to(['/service/report/index', 'sessionId' => $model->session_id])?>"><?=date('d.m.Y', $model->start_timestamp)?></a>;
+                        <a href="<?=Url::to(['/service/report/index', 'sessionId' => $model->session->id])?>"><?=date('d.m.Y', $model->session->start_timestamp)?></a>;
                     </td>
                     <td>
                         <!-- время на смене -->
 
                         <?php
-                        if (!is_null($model->stop_timestamp)) {
-                            $timeElapsed = $model->stop_timestamp - $model->start_timestamp;
+                        if (!is_null($model->session->stop_timestamp)) {
+                            $timeElapsed = $model->session->stop_timestamp - $model->session->start_timestamp;
                         } else {
-                            $timeElapsed = time() - $model->start_timestamp;
+                            $timeElapsed = time() - $model->session->start_timestamp;
                         }
 
                         $day = ( $timeElapsed / 86400 ) % 30;
@@ -281,12 +273,12 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                     </td>
                     <td>
                         <!-- заработано -->
-                        <?php $tooltip = '<p>Грязные: '.$sessionStatistic['salary'][$model->user_id]['base_salary'].'</p>'
+                        <?php $tooltip = '<p>Грязные: '.$model->charged.'</p>'
                              . '<p>Фикс: '.$fix.'</p>'
-                             . '<p>Штрафы: '.$sessionStatistic['salary'][$model->user_id]['fines'].'</p>'
-                             . '<p>Бонусы: '.$sessionStatistic['salary'][$model->user_id]['bonuses'].'</p>';
+                             . '<p>Штрафы: '.$model->fines.'</p>'
+                             . '<p>Бонусы: '.$model->fines.'</p>';
 
-                            echo Html::tag('a', number_format(round(($sessionStatistic['salary'][$model->user_id]['salary']), 0, PHP_ROUND_HALF_DOWN), 2, ',', ' '), [
+                            echo Html::tag('a', number_format($model->salary, 2, ',', ' '), [
                                 'data-template' => '<div class="popover" role="tooltip"><div class="popover-arrow"></div><div class="popover-content"></div></div>',
                                 'data-title' => 'Заработано',
                                 'data-html' => 'true',
@@ -311,16 +303,16 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                     </td>
                     <td>
                         <!-- к выплате -->
-                        <?php  echo round($sessionStatistic['salary'][$model->user_id]['salary'], 0, PHP_ROUND_HALF_DOWN) - $payed; ?>
+                        <?php  echo $model->salary - $payed; ?>
                         <?php // echo $sessionStatistic['salary'][$model->user_id]['salary'] - $payed; ?>
                     </td>
                     <td>
                         <!-- кнопка выплатить -->
                         <?php
-                            if ($sessionStatistic['salary'][$model->user_id]['salary'] - $payed > 0) {
+                            if ($model->salary - $payed > 0) {
                                 echo \pistol88\staffer\widgets\AddPayment::widget([
-                                    'staffer' => Staffer::findOne($model->user_id),
-                                    'paymentSum' => round(($sessionStatistic['salary'][$model->user_id]['salary'] - $payed), 0, PHP_ROUND_HALF_DOWN),
+                                    'staffer' => Staffer::findOne($model->worker_id),
+                                    'paymentSum' => ($model->salary - $payed),
                                     'sessionId' => $model->session->id
                                 ]);
                             }

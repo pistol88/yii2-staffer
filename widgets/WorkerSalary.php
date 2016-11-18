@@ -20,14 +20,14 @@ class WorkerSalary extends \yii\base\Widget
 
     public function run()
     {
-        $sessionsQuery = \Yii::$app->worksess->getUserSessions($this->worker->id);
+        $sessionsQuery = $this->worker->getSalary();
 
         if ($dateStart = \Yii::$app->request->get('date_start')) {
-            $sessionsQuery->andWhere(['>=', 'start', date('Y-m-d', strtotime($dateStart))]);
+            $sessionsQuery->andWhere(['>=', 'date', date('Y-m-d', strtotime($dateStart))]);
         }
 
         if ($dateStop = \Yii::$app->request->get('date_stop')) {
-            $sessionsQuery->andWhere(['<=', 'start', date('Y-m-d H:i:s', strtotime($dateStop) + 86399)]);
+            $sessionsQuery->andWhere(['<=', 'date', date('Y-m-d H:i:s', strtotime($dateStop) + 86399)]);
         }
 
         $dataProvider = new ActiveDataProvider([
