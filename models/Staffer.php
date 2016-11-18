@@ -100,6 +100,27 @@ class Staffer extends \yii\db\ActiveRecord
         return $this->name;
     }
     
+    public function setSalary($sessionId, $charged, $salary, $fines = 0, $bonuses = 0)
+    {
+        $salaryModel = new Salary;
+        $salaryModel->worker_id = $this->id;
+        $salaryModel->session_id = $sessionId;
+        $salaryModel->fix = $this->fix;
+        $salaryModel->charged = $charged;
+        $salaryModel->fines = $fines;
+        $salaryModel->bonuses = $bonuses;
+        $salaryModel->salary = $salary;
+        $salaryModel->date = date('Y-m-d H:i:s');
+        $salaryModel->date_timestamp = time();
+
+        return $salaryModel->save();
+    }
+    
+    public function getSalary()
+    {
+        return $this->hasMany(Salary::className(), ['worker_id' => 'id']);
+    }
+    
     public function getCategory()
     {
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
