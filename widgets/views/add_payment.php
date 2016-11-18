@@ -4,12 +4,12 @@
 <!-- Trigger the modal with a button -->
 <button type="button" class="btn btn-info"
         data-toggle="modal"
-        data-target="#modal-<?= $staffer->id ?>">
+        data-target="#modal-<?= $staffer->id ?>-<?= $sessionId ?>">
         Выплатить
 </button>
 
 <!-- Modal -->
-<div id="modal-<?= $staffer->id ?>" class="modal fade staffer-payment-modal"role="dialog">
+<div id="modal-<?= $staffer->id ?>-<?= $sessionId ?>" class="modal fade staffer-payment-modal"role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -58,7 +58,7 @@
             <div class="col-sm-12 text-center">
                 К выплате: <input type="text"
                                   data-role='sumInput'
-                                  data-staffer-input=<?= $staffer->id ?>
+                                  data-staffer-input=<?= $staffer->id ?>-<?= $sessionId ?>
                                   name="paymentSum"
                                   value="<?= $paymentSum ?>">
             </div>

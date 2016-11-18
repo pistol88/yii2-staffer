@@ -71,5 +71,11 @@ class Staffer extends Component
             return true;
         }
     }
+    public function getStafferPaymentsBySession($stafferId, $sessionId)
+    {
+        return Payment::find()
+                ->where(['worker_id' => $stafferId, 'session_id' => $sessionId])
+                ->orderBy(['date' => SORT_DESC]);
+    }
 
 }

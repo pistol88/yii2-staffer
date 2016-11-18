@@ -20,9 +20,10 @@ halumein.payment = {
                 url = $(self).data('url'),
                 sessionId = $(self).data('session-id'),
                 stafferId = $(self).data('staffer-id'),
-                $paymentSumInput = $('[data-staffer-input=' + stafferId + ']'),
-                sum = $paymentSumInput.val();
+                $paymentSumInput = $('[data-staffer-input=' + stafferId + '-' + sessionId + ']'),
 
+                sum = $paymentSumInput.val();
+                console.log(sum);
             if (sum != 0) {
                 halumein.payment.add(url,sessionId, stafferId,sum);
             } else {
