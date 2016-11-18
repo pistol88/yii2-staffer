@@ -24,14 +24,14 @@ $this->params['breadcrumbs'][] = 'Просмотр';
     ]);?>
 
     <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#staffer-more">Дополнительно</a></li>
+        <?php if(class_exists('\pistol88\staffer\widgets\WorkerSalary')) { ?><li class="active"><a data-toggle="tab" href="#staffer-salary">Зарплаты</a></li><?php } ?>
+        <li ><a data-toggle="tab" href="#staffer-more">Дополнительно</a></li>
         <?php if(class_exists('\pistol88\staffer\widgets\AddFine')) { ?><li><a data-toggle="tab" href="#staffer-fines">Штрафы</a></li><?php } ?>
         <?php if(class_exists('\pistol88\staffer\widgets\WorkerPayments')) { ?><li><a data-toggle="tab" href="#staffer-payments">Выплаты</a></li><?php } ?>
-        <?php if(class_exists('\pistol88\staffer\widgets\WorkerSalary')) { ?><li><a data-toggle="tab" href="#staffer-salary">Зарплаты</a></li><?php } ?>
     </ul>
 
     <div class="tab-content" style="padding: 10px;">
-        <div id="staffer-more" class="tab-pane fade in active">
+        <div id="staffer-more" class="tab-pane fade">
             <?php if($fieldPanel = \pistol88\field\widgets\Show::widget(['model' => $model])) { ?>
                 <?=$fieldPanel;?>
             <?php } else { ?>
@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = 'Просмотр';
             </div>
         <?php } ?>
         <?php if(class_exists('\pistol88\staffer\widgets\WorkerSalary')) { ?>
-            <div id="staffer-salary" class="tab-pane fade">
+            <div id="staffer-salary" class="tab-pane fade in active">
                 <?=\pistol88\staffer\widgets\WorkerSalary::widget(['worker' => $model]);?>
             </div>
         <?php } ?>
