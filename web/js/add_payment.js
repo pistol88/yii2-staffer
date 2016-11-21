@@ -15,6 +15,12 @@ halumein.payment = {
             console.log(this);
         });
 
+        $(document).find('.staffer-payment-modal').on('keypress', function() {
+            if (event.keyCode == 13) {
+            	$(this).find('[data-role=makePayment]').click();
+            }
+        });
+
         $makePaymentButton.on('click', function() {
             var self = this,
                 url = $(self).data('url'),
