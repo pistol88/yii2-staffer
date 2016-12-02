@@ -11,7 +11,7 @@ $models = $dataProvider->getModels();
 $js = <<< 'SCRIPT'
 $(function () {
     $("[data-toggle='tooltip']").tooltip();
-});;
+});
 $(function () {
     $("[data-toggle='popover']").popover();
 });
@@ -120,7 +120,6 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                     foreach ($models as $key => $model) {
 
                         $payments = \Yii::$app->staffer->getStafferPaymentsBySession($model->worker_id, $model->session_id);
-
                         //  время на смене
                         // if (!is_null($model->stop_timestamp)) {
                         //     $totalTimeElapsed += $model->stop_timestamp - $model->start_timestamp;
@@ -194,11 +193,18 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                             </tr>
                             <tr>
                                 <td>
-                                    К выплате
+                                    Заработано за период
                                 </td>
                                 <td>
                                     <?= number_format($totalSalary, 2, ',', ' ') ?>
                                 </td>
+                            </tr>
+                            <tr>
+                                <td>Не погашенный долг/аванс</td>
+                                <?php
+                                    $totalDebt = \Yii::$app->staffer->getStafferDebts($model->worker_id, 'given')->sum('sum') - \Yii::$app->staffer->getStafferDebts($model->worker_id, 'return')->sum('sum');
+                                 ?>
+                                <td><?= $totalDebt ?></td>
                             </tr>
                             <tr>
                                 <td>
@@ -210,7 +216,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                             </tr>
                         </table>
                         <p>
-                            Выплачено за период: <?= number_format($totalPayed, 2, ',', ' ') ?>
+                            <strong>Выплачено за период: <?= number_format($totalPayed, 2, ',', ' ') ?></strong>
                         </p>
                  <?php } ?>
             </div>
@@ -244,6 +250,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
             <?php foreach ($models as $key => $model) { ?>
                 <?php
                     $payments = \Yii::$app->staffer->getStafferPaymentsBySession($model->worker_id, $model->session->id);
+                    $debt = \Yii::$app->staffer->getStafferDebtsBySession($model->worker_id, $model->session->id, 'given')->sum('sum') - \Yii::$app->staffer->getStafferDebtsBySession($model->worker_id, $model->session->id, 'return')->sum('sum');
                 ?>
                 <tr>
                     <td>
@@ -299,6 +306,10 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                             } else {
                                 echo 'выплат не было';
                             }
+                            // echo "<br>";
+                            // if ($debt > 0) {
+                            //     echo "аванс: ".$debt;
+                            // }
                         ?>
                     </td>
                     <td>
@@ -309,13 +320,13 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                     <td>
                         <!-- кнопка выплатить -->
                         <?php
-                            if ($model->salary - $payed > 0) {
+                            // if ($model->salary - $payed > 0) {
                                 echo \pistol88\staffer\widgets\AddPayment::widget([
                                     'staffer' => Staffer::findOne($model->worker_id),
                                     'paymentSum' => ($model->salary - $payed),
                                     'sessionId' => $model->session->id
                                 ]);
-                            }
+                            // }
                         ?>
                     </td>
                 </tr>

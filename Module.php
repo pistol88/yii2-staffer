@@ -7,6 +7,7 @@ class Module extends \yii\base\Module
 {
     const EVENT_PAYMENT_CREATE = 'paymentCreate';
     const EVENT_PAYMENT_REMOVE = 'paymentRemove';
+    const EVENT_DEBT_CREATE = 'debtCreate';
 
     public $adminRoles = ['admin', 'superadmin'];
     public $stafferStatuses = ['active' => 'Активный', 'dismissed' => 'Уволенный', 'missing' => 'Пропавший'];
