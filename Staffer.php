@@ -4,7 +4,9 @@ namespace pistol88\staffer;
 use yii\base\Component;
 use pistol88\staffer\events\PaymentEvent;
 use pistol88\staffer\events\DebtEvent;
+use pistol88\staffer\events\BonusEvent;
 use pistol88\staffer\models\Payment;
+use pistol88\staffer\models\Bonus;
 use pistol88\staffer\models\DebtTransactions;
 use pistol88\staffer\models\Staffer as StafferModel;
 use yii;
@@ -143,6 +145,38 @@ class Staffer extends Component
             $query->andWhere(['type' => $type]);
          }
         return $query->orderBy(['date' => SORT_DESC]);
+    }
+
+    public function addBonus($stafferId, $sum, $reason, $comment = null)
+    {
+        $bonusModel = new Bonus;
+
+        $bonusModel->staffer_id = $stafferId;
+        $bonusModel->sum = $sum;
+        $bonusModel->reason = $reason;
+
+        $bonusModel->comment = $comment;
+
+        $bonusModel->created = date('Y-m-d H:i:s');
+        $bonusModel->user_id = \Yii::$app->user->id;
+
+        if ($bonusModel->save()) {
+
+            $module = \Yii::$app->getModule('staffer');
+            $bonusEvent = new BonusEvent(['model' => $bonusModel]);
+            $module->trigger($module::EVENT_BONUS_CREATE, $bonusEvent);
+
+            return $bonusModel->id;
+
+        } else {
+            return false;
+        }
+
+    }
+
+    public function getStafferBonuses($stafferId)
+    {
+        return Bonus::find()->where(['staffer_id' => $stafferId]);
     }
 
 }

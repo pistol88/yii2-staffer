@@ -75,7 +75,7 @@
             </div>
         </div>
 
-        <?php if ($debt) { ?>
+        <?php if ($debt && $paymentSum > 0) { ?>
             <div class="row debt-row">
                 <div class="col-sm-8 col-sm-offset-2">
                     <div class="checkbox">

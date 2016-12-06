@@ -27,8 +27,9 @@ $this->params['breadcrumbs'][] = 'Просмотр';
         <?php if(class_exists('\pistol88\staffer\widgets\WorkerSalary')) { ?><li class="active"><a data-toggle="tab" href="#staffer-salary">Зарплаты</a></li><?php } ?>
         <li ><a data-toggle="tab" href="#staffer-more">Дополнительно</a></li>
         <?php if(class_exists('\pistol88\staffer\widgets\AddFine')) { ?><li><a data-toggle="tab" href="#staffer-fines">Штрафы</a></li><?php } ?>
-        <?php if(class_exists('\pistol88\staffer\widgets\WorkerPayments')) { ?><li><a data-toggle="tab" href="#staffer-payments">Выплаты</a></li><?php } ?>
+        <?php /* if(class_exists('\pistol88\staffer\widgets\WorkerPayments')) { ?><li><a data-toggle="tab" href="#staffer-payments">Выплаты</a></li><?php  }*/ ?>
         <?php if(class_exists('\pistol88\staffer\widgets\WorkerDebt')) { ?><li><a data-toggle="tab" href="#staffer-debts">Долги</a></li><?php } ?>
+        <?php if(class_exists('\pistol88\staffer\widgets\WorkerBonus')) { ?><li><a data-toggle="tab" href="#staffer-bonus">Премии</a></li><?php } ?>
     </ul>
 
     <div class="tab-content" style="padding: 10px;">
@@ -44,11 +45,11 @@ $this->params['breadcrumbs'][] = 'Просмотр';
                 <?=\pistol88\staffer\widgets\AddFine::widget(['staffer' => $model]);?>
             </div>
         <?php } ?>
-        <?php if(class_exists('\pistol88\service\widgets\WorkerPayments')) { ?>
+        <?php /* if(class_exists('\pistol88\service\widgets\WorkerPayments')) { ?>
             <div id="staffer-payments" class="tab-pane fade">
                 <?=\pistol88\staffer\widgets\WorkerPayments::widget(['worker_id' => $model->id]);?>
             </div>
-        <?php } ?>
+        <?php } */ ?>
         <?php if(class_exists('\pistol88\staffer\widgets\WorkerSalary')) { ?>
             <div id="staffer-salary" class="tab-pane fade in active">
                 <?=\pistol88\staffer\widgets\WorkerSalary::widget(['worker' => $model]);?>
@@ -64,6 +65,20 @@ $this->params['breadcrumbs'][] = 'Просмотр';
                 <div class="row">
                     <div class="col-sm-12">
                         <?=\pistol88\staffer\widgets\WorkerDebt::widget(['worker' => $model]);?>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+        <?php if(class_exists('\pistol88\staffer\widgets\WorkerBonus')) { ?>
+            <div id="staffer-bonus" class="tab-pane fade">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <?=\pistol88\staffer\widgets\AddBonus::widget(['staffer' => $model]);?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <?=\pistol88\staffer\widgets\WorkerBonus::widget(['staffer' => $model]);?>
                     </div>
                 </div>
             </div>

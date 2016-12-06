@@ -5,6 +5,8 @@ use Yii;
 use yii\helpers\Url;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+use pistol88\staffer\models\Staffer;
+
 
 class Fine extends \yii\db\ActiveRecord
 {
@@ -18,12 +20,12 @@ class Fine extends \yii\db\ActiveRecord
             ],
         ];
     }
-    
+
     public static function tableName()
     {
         return '{{%staffer_fine}}';
     }
-    
+
     public function rules()
     {
         return [

@@ -117,6 +117,17 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                     // выплачено
                     $totalPayed = 0;
 
+                    $bonusesQuery = \Yii::$app->staffer->getStafferBonuses($worker->id);
+                    if(isset($dateStart) && $dateStart != '') {
+                        $bonusesQuery->andWhere(['>=', 'created', $dateStart]);
+                    }
+
+                    if(isset($dateStop) && $dateStop != '') {
+                        $bonusesQuery->andWhere(['<=', 'created', $dateStop]);
+                    }
+
+                    $totalBonuses = $bonusesQuery->sum('sum');
+
                     foreach ($models as $key => $model) {
 
                         $payments = \Yii::$app->staffer->getStafferPaymentsBySession($model->worker_id, $model->session_id);
@@ -216,7 +227,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                             </tr>
                         </table>
                         <p>
-                            <strong>Выплачено за период: <?= number_format($totalPayed, 2, ',', ' ') ?></strong>
+                            <strong>Выплачено за период: <?= number_format($totalPayed + $totalBonuses, 2, ',', ' ') ?></strong>
                         </p>
                  <?php } ?>
             </div>

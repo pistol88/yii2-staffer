@@ -111,12 +111,16 @@ halumein.payment = {
                 return false;
             }
             // выдают больше заработанной суммы
+
             if (sum > basicPaymentSum)  {
 
                 // распиливаем на зарплату и аванс
                 debtSum = sum - basicPaymentSum; // сумма сверх текущего заработка
-                halumein.payment.add(url,sessionId,stafferId,basicPaymentSum, false);
-                halumein.debt.add(debtUrl,sessionId,stafferId,debtSum, 'given', false);
+                if (sum > 0) {
+                    halumein.payment.add(url,sessionId,stafferId,basicPaymentSum, false);
+                }
+
+                halumein.debt.add(debtUrl,sessionId,stafferId,debtSum, 'given');
                 return false;
             }
 
