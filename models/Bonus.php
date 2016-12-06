@@ -51,7 +51,7 @@ class Bonus extends \yii\db\ActiveRecord
             'reason' => 'Причина',
             'sum' => 'Сумма',
             'comment' => 'Комментарий',
-            'created' => 'Дата выплаты',
+            'created' => 'Дата начисления',
             'canceled' => 'Отмена',
             'user_id' => 'Пользователь'
         ];

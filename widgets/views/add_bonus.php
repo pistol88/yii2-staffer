@@ -5,7 +5,7 @@
 <button type="button" class="btn btn-info"
         data-toggle="modal"
         data-target="#modal-bonus-<?= $staffer->id ?>">
-        Выплатить премию
+        Начислить премию
 </button>
 
 <!-- Modal -->
@@ -21,7 +21,7 @@
       <div class="modal-body">
         <div class="row">
             <div class="col-sm-12 text-center">
-                Выплатить: <input type="text"
+                Начислить: <input type="text"
                                   data-role='bonus-sum-input'
                                   data-staffer-bonus-sum-input=<?= $staffer->id ?>-<?= $sessionId ?>
                                   value="0"
@@ -47,7 +47,7 @@
                     data-role="make-bonus-payment"
                     data-url="<?= Url::to(['/staffer/bonus/add-ajax'])?>",
                     data-staffer-id=<?= $staffer->id ?>>
-                    Выплатить
+                    Начислить
                 </div>
             </div>
         </div>

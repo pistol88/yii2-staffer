@@ -20,7 +20,7 @@ use yii\widgets\Pjax;
                     return  date('d.m.Y H:i:s', strtotime($model->created));
                 }
             ],
-            ['attribute' => 'sum', 'filter' => false, 'label' => 'Выплачено'],
+            ['attribute' => 'sum', 'filter' => false, 'label' => 'Начислено'],
             [
                 'attribute' => 'reason'
             ]
