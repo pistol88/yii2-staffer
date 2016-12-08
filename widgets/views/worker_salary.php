@@ -196,7 +196,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                             </tr>
                             <tr>
                                 <td>
-                                    Бонусы
+                                    Премии и бонусы
                                 </td>
                                 <td>
                                     <?= number_format($totalBonuses, 2, ',', ' ') ?>
@@ -227,7 +227,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                             </tr>
                         </table>
                         <p>
-                            <strong>Выплачено за период: <?= number_format($totalPayed + $totalBonuses, 2, ',', ' ') ?></strong>
+                            <strong>Выплачено за период: <?= number_format($totalPayed, 2, ',', ' ') ?></strong>
                         </p>
                  <?php } ?>
             </div>
@@ -291,10 +291,10 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                     </td>
                     <td>
                         <!-- заработано -->
-                        <?php $tooltip = '<p>Грязные: '.$model->charged.'</p>'
+                        <?php $tooltip = '<p>Начислено: '.$model->charged.'</p>'
                              . '<p>Фикс: '.$fix.'</p>'
                              . '<p>Штрафы: '.$model->fines.'</p>'
-                             . '<p>Бонусы: '.$model->bonuses.'</p>';
+                             . '<p>Премии и бонусы: '.$model->bonuses.'</p>';
 
                             echo Html::tag('a', number_format($model->salary, 2, ',', ' '), [
                                 'data-template' => '<div class="popover" role="tooltip"><div class="popover-arrow"></div><div class="popover-content"></div></div>',
