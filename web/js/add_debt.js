@@ -22,29 +22,31 @@ halumein.debt = {
                 sessionId = $(self).data('session-id');
                 sum = $('[data-staffer-debt-sum-input=' + stafferId + '-' + sessionId +']').val();
 
-            halumein.debt.add(url, sessionId, stafferId, sum, 'given');
+            // halumein.debt.add(url, sessionId, stafferId, sum, 'given');
+
+            $.when(
+                halumein.debt.add(url, sessionId, stafferId, sum, 'given')
+            ).done(function() {
+                location.reload();
+            });
         });
 
 
     },
-    add: function(url,sessionId, stafferId, sum, type, reloadPage = true) {
-        $.ajax({
+    add: function(url,sessionId, stafferId, sum, type) {
+        return $.ajax({
             type: 'POST',
             url: url,
             data: {stafferId: stafferId, sum: sum, sessionId : sessionId, type : type},
             success : function(response) {
                 if (response.status == 'success') {
-                    if (reloadPage) {
-                        location.reload();
-                    }
                 } else {
                     console.log('error');
                 }
             },
             fail : function() {
                 alert('Не удалось произвести выплату.');
-
-            }
+            },
         });
     },
     remove: function(url, paymentId, $block) {

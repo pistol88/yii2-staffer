@@ -8,6 +8,9 @@ $this->params['breadcrumbs'][] = ['label' => 'Сотрудники', 'url' => ['
 $this->params['breadcrumbs'][] = 'Просмотр';
 ?>
 <div class="staffer-view">
+
+    <h1><?= $model->name ?></h1>
+
     <p><a href="<?=Url::toRoute(['update', 'id' => $model->id]);?>" class="btn btn-success">Редактировать</a></p>
 
     <?=DetailView::widget([

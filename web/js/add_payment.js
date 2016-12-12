@@ -111,20 +111,40 @@ halumein.payment = {
                 return false;
             }
             // выдают больше заработанной суммы
-
             if (sum > basicPaymentSum)  {
-
+                console.log('sum > basicPaymentSum');
                 // распиливаем на зарплату и аванс
                 debtSum = sum - basicPaymentSum; // сумма сверх текущего заработка
+
+                // всё что сверх заработка - записываем в аванс/долг
                 if (sum > 0) {
-                    halumein.payment.add(url,sessionId,stafferId,basicPaymentSum, false);
+                    // ждём завершения обоих запросов
+                    $.when(
+                        // ждём завершения ajax-запросов
+                        halumein.payment.add(url,sessionId,stafferId,basicPaymentSum),
+                        halumein.debt.add(debtUrl,sessionId,stafferId,debtSum, 'given')
+                    ).done(function() {
+                        // и рефрешим страницу
+                        location.reload();
+                    });
+                    return false;
                 }
 
-                halumein.debt.add(debtUrl,sessionId,stafferId,debtSum, 'given');
+                // иначе только запись в аванс/долг
+                // ждём завершения ajax-запроса
+                $.when(
+                    halumein.debt.add(debtUrl,sessionId,stafferId,debtSum, 'given')
+                ).done(function() {
+                    // и рефрешим страницу
+                    location.reload();
+                });
                 return false;
             }
 
             if ($debtCheckbox.is(":checked")) {
+                // стоит галка про погашение аванса
+                console.log('выбрано погасить из аванса');
+                // посчитаем суммы выплаты и сумму возврата долга
                 paymentSum = sum - $debtReturnInput.val();
                 debtReturnSum = $debtReturnInput.val();
 
@@ -132,26 +152,49 @@ halumein.payment = {
                     alert('Сумма погашения аванса не может быть болше суммы заработной платы');
                     return false;
                 } else if (paymentSum > 0) {
-                    // часть суммы выплачиваем, часть гасим аванс
-                    halumein.payment.add(url,sessionId,stafferId,sum, false);
-                    halumein.debt.add(debtUrl,sessionId,stafferId,debtReturnSum, 'return', false);
+                    console.log('сумма долга меньше суммы общей выплаты');
+                    // часть суммы выплачиваем зарплатой, часть гасим аванс
+
+                    // ждём завершения ajax-запросов
+                    $.when(
+                        halumein.payment.add(url,sessionId,stafferId,sum),
+                        halumein.debt.add(debtUrl,sessionId,stafferId,debtReturnSum, 'return')
+                    ).done(function() {
+                        // и рефрешим страницу
+                        location.reload();
+                    });
 
                 } else {
+                    console.log('сумма долга больше суммы общей выплаты. всё в аванс');
                     // всё в аванс
-                    halumein.payment.add(url,sessionId,stafferId,debtReturnSum, false);
-                    halumein.debt.add(debtUrl,sessionId,stafferId,debtReturnSum, 'return', false);
+
+                    // ждём завершения ajax-запросов
+                    $.when(
+                        halumein.payment.add(url,sessionId,stafferId,debtReturnSum),
+                        halumein.debt.add(debtUrl,sessionId,stafferId,debtReturnSum, 'return')
+                    ).done(function() {
+                        // и рефрешим страницу
+                        location.reload();
+                    });
+
                 }
 
             } else {
                 if (sum != 0) {
+                    console.log('обычная выплата');
                     // обычная выплата
-                    halumein.payment.add(url,sessionId, stafferId,sum);
+
+                    $.when(
+                        halumein.payment.add(url,sessionId, stafferId, sum)
+                    ).done(function() {
+                        location.reload();
+                    });
+
                 } else {
                     $('#modal-'+stafferId).modal('toggle');
                 }
             }
 
-            location.reload();
             return false;
 
         });
@@ -168,16 +211,18 @@ halumein.payment = {
             }
         });
     },
-    add: function(url,sessionId, stafferId, sum, reloadPage = true) {
-        $.ajax({
+    add: function(url,sessionId, stafferId, sum) {
+        return $.ajax({
             type: 'POST',
             url: url,
             data: {stafferId: stafferId, sum: sum, sessionId : sessionId},
             success : function(response) {
                 if (response.status == 'success') {
-                    if (reloadPage) {
-                        location.reload();
-                    }
+                    halumein.payment.done = true;
+
+                    // if (reloadPage) {
+                        // location.reload();
+                    // }
                 } else {
                     alert('ошибка');
                     console.log('error');
@@ -186,7 +231,7 @@ halumein.payment = {
             fail : function() {
                 alert('Не удалось произвести выплату.');
 
-            }
+            },
         });
     },
     remove: function(url, paymentId, $block) {
