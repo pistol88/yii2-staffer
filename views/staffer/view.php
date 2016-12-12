@@ -61,8 +61,9 @@ $this->params['breadcrumbs'][] = 'Просмотр';
         <?php if(class_exists('\pistol88\staffer\widgets\WorkerDebt')) { ?>
             <div id="staffer-debts" class="tab-pane fade">
                 <div class="row">
-                    <div class="col-sm-3">
+                    <div class="col-sm-12">
                         <?=\pistol88\staffer\widgets\AddDebt::widget(['worker' => $model]);?>
+                        <?=\pistol88\staffer\widgets\ReturnDebt::widget(['worker' => $model]);?>
                     </div>
                 </div>
                 <div class="row">

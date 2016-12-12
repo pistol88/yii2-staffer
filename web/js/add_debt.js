@@ -8,10 +8,15 @@ halumein.debt = {
         $modal = $('[data-role=add-debt-modal]');
 
         $submitButton = $('[data-role=make-debt-payment]');
+        $returnDebtsubmitButton = $('[data-role=make-debt-return]');
 
         // $(document).find('.staffer-debt-modal').on('shown.bs.modal', function() {
         $modal.on('shown.bs.modal', function() {
             var self = this;
+
+            currentModal = self;
+            $(currentModal).find('[data-role=notice]').hide();
+
             $(self).find('[data-role=debt-sum-input]').focus().select();
         });
 
@@ -19,13 +24,24 @@ halumein.debt = {
             var self = this,
                 url = $(self).data('url'),
                 stafferId = $(self).data('staffer-id'),
+                type = $(self).data('type'),
                 sessionId = $(self).data('session-id');
-                sum = $('[data-staffer-debt-sum-input=' + stafferId + '-' + sessionId +']').val();
+                sum = $(currentModal).find('[data-staffer-debt-sum-input=' + stafferId + '-' + sessionId +']').val();
 
-            // halumein.debt.add(url, sessionId, stafferId, sum, 'given');
+            if (type === 'return') {
+                currentDebt = $(self).data('current-debt');
+                if (sum > currentDebt) {
+                    console.log('sum > currentDebt');
+                    $(currentModal).find('[data-role=notice-text]').html('Внимание! Сумма внесения не может быть больше суммы задолженности!');
+                    $(currentModal).find('[data-role=notice]').slideDown();
+                    $(currentModal).find('[data-staffer-debt-sum-input=' + stafferId + '-' + sessionId +']').focus().select();
+
+                    return false;
+                }
+            }
 
             $.when(
-                halumein.debt.add(url, sessionId, stafferId, sum, 'given')
+                halumein.debt.add(url, sessionId, stafferId, sum, type)
             ).done(function() {
                 location.reload();
             });

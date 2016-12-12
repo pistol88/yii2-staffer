@@ -218,11 +218,7 @@ halumein.payment = {
             data: {stafferId: stafferId, sum: sum, sessionId : sessionId},
             success : function(response) {
                 if (response.status == 'success') {
-                    halumein.payment.done = true;
-
-                    // if (reloadPage) {
-                        // location.reload();
-                    // }
+                    // do nothing
                 } else {
                     alert('ошибка');
                     console.log('error');

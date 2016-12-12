@@ -6,7 +6,7 @@ use yii\widgets\Pjax;
 ?>
 <div class="worker-debts-widget">
     <div class="summary">
-        Общая сумма аванса: <?= $totalDebt ?>
+        <h2>Общая сумма долга: <?= $totalDebt ?></h2>
     </div>
     <?php Pjax::begin(); ?>
     <?php echo GridView::widget([
