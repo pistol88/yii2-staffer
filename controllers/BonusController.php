@@ -70,13 +70,13 @@ class BonusController extends Controller
 
     }
 
-    public function actionRemoveAjax()
+    public function actionCancelAjax()
     {
-        $paymentId = (int)yii::$app->request->post('paymentId');
+        $bonusId = (int)yii::$app->request->post('bonusId');
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-        if ($paymentId = Yii::$app->staffer->removePayment($paymentId)) {
+        if ($paymentId = Yii::$app->staffer->cancelBonus($bonusId)) {
             return [
                 'status' => 'success'
             ];

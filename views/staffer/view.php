@@ -6,6 +6,8 @@ use yii\helpers\Url;
 $this->title = Html::encode($model->name);
 $this->params['breadcrumbs'][] = ['label' => 'Сотрудники', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Просмотр';
+
+
 ?>
 <div class="staffer-view">
 

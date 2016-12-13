@@ -33,7 +33,7 @@ class Bonus extends \yii\db\ActiveRecord
     {
         return [
             [['staffer_id'], 'required'],
-            [['staffer_id', 'user_id'], 'integer'],
+            [['staffer_id', 'user_id', 'canceled_user_id'], 'integer'],
             [['sum'], 'number'],
             [['created', 'canceled'], 'safe'],
             [['reason', 'comment'], 'string', 'max' => 255],
@@ -51,9 +51,11 @@ class Bonus extends \yii\db\ActiveRecord
             'reason' => 'Причина',
             'sum' => 'Сумма',
             'comment' => 'Комментарий',
-            'created' => 'Дата начисления',
+            'created' => 'Дата создания',
             'canceled' => 'Отмена',
-            'user_id' => 'Пользователь'
+            'user_id' => 'Пользователь',
+            'canceled_user_id' => 'Пользователь отменивший премию',
+            'payed' => 'Начислена в зп',
         ];
     }
 
