@@ -22,12 +22,17 @@ class WorkerSalary extends \yii\base\Widget
     {
         $sessionsQuery = $this->worker->getSalary();
 
-        if ($dateStart = \Yii::$app->request->get('date_start')) {
-            $sessionsQuery->andWhere(['>=', 'date', date('Y-m-d', strtotime($dateStart))]);
-        }
+        
+        if(\Yii::$app->request->get('date_start') && \Yii::$app->request->get('date_start') == \Yii::$app->request->get('date_stop')) {
+            $sessionsQuery->andWhere(['DATE_FORMAT(date, "%Y-%m-%d")' => date('Y-m-d', strtotime(\Yii::$app->request->get('date_start')))]);
+        } else {
+            if ($dateStart = \Yii::$app->request->get('date_start')) {
+                $sessionsQuery->andWhere(['>=', 'date', date('Y-m-d', strtotime($dateStart))]);
+            }
 
-        if ($dateStop = \Yii::$app->request->get('date_stop')) {
-            $sessionsQuery->andWhere(['<=', 'date', date('Y-m-d', strtotime($dateStop))]);
+            if ($dateStop = \Yii::$app->request->get('date_stop')) {
+                $sessionsQuery->andWhere(['<=', 'date', date('Y-m-d', strtotime($dateStop))]);
+            }
         }
 
         $dataProvider = new ActiveDataProvider([
