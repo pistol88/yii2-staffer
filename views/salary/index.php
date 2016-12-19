@@ -24,7 +24,7 @@ $sessionsSum = [];
     </div>
     
     <h1>Зарплатная ведомость</h1>
-    <p><?=$dateStart;?> - <?=$dateStop;?></p>
+    <p><?=date('d.m.Y', strtotime($dateStart)); ?> - <?=date('d.m.Y', strtotime($dateStop)); ?></p>
     <a href="#" class="btn btn-submit" onclick="pistol88.staffer.callPrint('worker-sapary-container'); return false;" style="float: right;"><i class="glyphicon glyphicon-print"></i></a>
     
     <div id="worker-sapary-container">
@@ -42,7 +42,7 @@ $sessionsSum = [];
                 Итого
             </th>
             <th>
-            
+                
             </th>
         </tr>
         

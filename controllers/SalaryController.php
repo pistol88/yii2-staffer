@@ -31,11 +31,11 @@ class SalaryController extends Controller
     {
         $staffers = Staffer::find()->where(['status' => 'active'])->all();
         
-        $sessions = yii::$app->worksess->getSessionsByDatePeriod(date('Y').'-'.date('m').'-'.$this->module->salaryPeriodDayStart, date('Y').'-'.date('m').'-'.$this->module->salaryPeriodDayStop);
+        $dateStart = date('Y-m-d', time()-($this->module->salaryPeriodDays*86400));
+        $dateStop = date('Y-m-d');
         
-        $dateStart = $this->module->salaryPeriodDayStart.'.'.date('m').'.'.date('Y');
-        $dateStop = $this->module->salaryPeriodDayStop.'.'.date('m').'.'.date('Y');
-        
+        $sessions = yii::$app->worksess->getSessionsByDatePeriod($dateStart, $dateStop);
+
         return $this->render('index', [
             'dateStart' => $dateStart,
             'dateStop' => $dateStop,
