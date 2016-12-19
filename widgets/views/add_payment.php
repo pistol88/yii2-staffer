@@ -41,7 +41,7 @@
                                 <td>
                                     <?= $payment->sum ?>
                                 </td>
-                                <td class="hidden">
+                                <td>
                                     <span class="glyphicon glyphicon-remove cancel-payment"
                                     data-url=<?= Url::to(['/staffer/payment/remove-ajax']) ?>
                                     data-role="cancelPayment"
