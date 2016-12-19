@@ -40,30 +40,29 @@ class PaymentController extends Controller
 
     public function actionAddPeriodAjax()
     {
-
         $data = yii::$app->request->post();
 
         $stafferId = $data['stafferId'];
         $sessions = $data['session'];
+        
+        $status = 'fail';
         
         foreach($sessions as $key => $sessionId) {
             $sum = $data['sum'][$sessionId];
             $paymentId = Yii::$app->staffer->addPayment($stafferId, $sum, $sessionId);
 
             if ($paymentId) {
-                \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                $status = 'success';
             } else {
-                \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                
                 return [
                     'status' => 'error'
                 ];
             }
         }
         
-        return [
-            'status' => 'success'
-        ];
+        return json_encode([
+            'status' => $status
+        ]);
     }
     
     public function actionAddAjax()

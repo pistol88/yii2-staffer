@@ -355,10 +355,12 @@ if($dateStop = yii::$app->request->get('date_stop')) {
          <?php } ?>
          <tr>
             <th colspan="4" style="text-align: right;">Итого</th>
-            <th colspan="2">
-                <p align="right">
+            <th>
+                <p>
                     <?= number_format(($totalSalary - $totalPayed), 2, ',', ' ') ?>
                 </p>
+            </th>
+            <th>
                 <p align="right">
                     <input class="btn btn-success" type="submit" name="payment" value="Выплатить отмеченные" style="font-size: 12px; padding: 2px;" />
                 </p>
