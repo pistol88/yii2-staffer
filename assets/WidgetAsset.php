@@ -9,6 +9,10 @@ class WidgetAsset extends AssetBundle
         'yii\bootstrap\BootstrapPluginAsset',
     ];
 
+    public $js = [
+        'js/worker_salary.js',
+    ];
+    
     public function init()
     {
         $this->sourcePath = __DIR__ . '/../web';

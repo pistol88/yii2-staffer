@@ -22,7 +22,7 @@ class PaymentController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-				'only' => ['add', 'index'],
+				'only' => ['add', 'index', 'add-period-ajax', 'remove-ajax', 'add-ajax'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -38,6 +38,34 @@ class PaymentController extends Controller
         echo 'test';
     }
 
+    public function actionAddPeriodAjax()
+    {
+
+        $data = yii::$app->request->post();
+
+        $stafferId = $data['stafferId'];
+        $sessions = $data['session'];
+        
+        foreach($sessions as $key => $sessionId) {
+            $sum = $data['sum'][$sessionId];
+            $paymentId = Yii::$app->staffer->addPayment($stafferId, $sum, $sessionId);
+
+            if ($paymentId) {
+                \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            } else {
+                \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                
+                return [
+                    'status' => 'error'
+                ];
+            }
+        }
+        
+        return [
+            'status' => 'success'
+        ];
+    }
+    
     public function actionAddAjax()
     {
 

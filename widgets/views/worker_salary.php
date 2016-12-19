@@ -234,6 +234,9 @@ if($dateStop = yii::$app->request->get('date_stop')) {
         </div>
 
     </div>
+    
+<form class="worker_salary_mass" action="<?=Url::toRoute(['/staffer/payment/add-period-ajax']);?>" method="post">
+    <input type="hidden" name="stafferId" value="<?=$model->worker_id;?>" />
 
     <table class="table table-bordered">
         <tr>
@@ -253,7 +256,10 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                 К выплате
             </th>
             <th>
-
+                Выплата
+            </th>
+            <th>
+                <input class="worker_salary_checkall" type="checkbox" value="1" />
             </th>
         </tr>
 
@@ -326,6 +332,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                     <td>
                         <!-- к выплате -->
                         <?php  echo $model->salary - $payed; ?>
+                        <input type="hidden" name="sum[<?=$model->session->id;?>]" value="<?=($model->salary-$payed);?>" />
                         <?php // echo $sessionStatistic['salary'][$model->user_id]['salary'] - $payed; ?>
                     </td>
                     <td>
@@ -340,17 +347,36 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                             // }
                         ?>
                     </td>
+                    <td>
+                        <input class="worker_salary_check" type="checkbox" name="session[<?=$model->session->id;?>]" value="<?=$model->session->id;?>" />
+                    </td>
                 </tr>
             <?php } ?>
          <?php } ?>
-        <tr>
-
+         <tr>
+            <th colspan="4" style="text-align: right;">Итого</th>
+            <th colspan="2">
+                <p align="right">
+                    <?= number_format(($totalSalary - $totalPayed), 2, ',', ' ') ?>
+                </p>
+                <p align="right">
+                    <input class="btn btn-success" type="submit" name="payment" value="Выплатить отмеченные" style="font-size: 12px; padding: 2px;" />
+                </p>
+            </th>
+            <th>
+                <input class="worker_salary_checkall" type="checkbox" value="1" />
+            </th>
         </tr>
     </table>
-
+    <div style="float: right;">
+       
+    </div>
+</form>
+    
     <?= \yii\widgets\LinkPager::widget([
         'pagination'=>$dataProvider->pagination,
     ]); ?>
 
     <?php Pjax::end(); ?>
+    
 </div>

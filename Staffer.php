@@ -114,8 +114,6 @@ class Staffer extends Component
         } else {
             return false;
         }
-
-
     }
 
     public function getStafferPaymentsBySession($stafferId, $sessionId)

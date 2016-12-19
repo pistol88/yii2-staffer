@@ -26,7 +26,6 @@ class WorkerSalary extends \yii\base\Widget
             $sessionsQuery->andWhere(['>=', 'date', date('Y-m-d', strtotime($dateStart))]);
         }
 
-
         if ($dateStop = \Yii::$app->request->get('date_stop')) {
             $sessionsQuery->andWhere(['<=', 'date', date('Y-m-d H:i:s', strtotime($dateStop) + 86399)]);
         }
