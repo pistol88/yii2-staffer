@@ -8,6 +8,8 @@ halumein.bonus = {
         $modal = $('[data-role=add-bonus-modal]');
         $submitButton = $('[data-role=make-bonus-payment]');
 
+        $cancelBonusButton = $('[data-role=cancel-bonus]');
+
         // $(document).find('.staffer-debt-modal').on('shown.bs.modal', function() {
         $modal.on('shown.bs.modal', function() {
             var self = this;
@@ -61,6 +63,13 @@ halumein.bonus = {
             halumein.bonus.add(url, stafferId, sum, reason);
         });
 
+        $cancelBonusButton.on('click', function() {
+            var self = this,
+                url = $(self).data('url'),
+                id = $(self).data('id');
+
+            halumein.bonus.cancel(url, id, self);
+        });
 
     },
     add: function(url, stafferId, sum, reason, reloadPage = true) {
@@ -83,18 +92,23 @@ halumein.bonus = {
             }
         });
     },
-    remove: function(url, paymentId, $block) {
+    cancel: function(url, bonusId, $block) {
         $.ajax({
             type: 'POST',
             url: url,
-            data: {paymentId : paymentId},
+            data: {bonusId : bonusId},
             success: function(response) {
                 if (response.status == 'success') {
-                    $block.fadeOut();
+                    $($block).fadeOut('fast', function() {
+                        $('<span style="display: none;">отменена</span>').insertAfter($block).fadeIn();
+                        $block.remove();
+                    });
+                } else {
+                    alert('Не удалось отменить премию');
                 }
             },
             fail: function() {
-                alert('Не удалось отменить выплату.');
+                alert('Не удалось отменить премию.');
             }
         });
     }

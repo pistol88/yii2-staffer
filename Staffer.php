@@ -172,9 +172,38 @@ class Staffer extends Component
 
     }
 
+    public function cancelBonus($bonusId)
+    {
+        $bonusModel = Bonus::findOne($bonusId);
+
+        if (!$bonusModel) {
+            return false;
+        }
+
+        if ($bonusModel->canceled || $bonusModel->payed) {
+            return false;
+        }
+
+        $bonusModel->canceled = date('Y-m-d H:i:s');
+        $bonusModel->canceled_user_id = \Yii::$app->user->id;
+
+        if ($bonusModel->save()) {
+
+            $module = \Yii::$app->getModule('staffer');
+            $bonusEvent = new BonusEvent(['model' => $bonusModel]);
+            $module->trigger($module::EVENT_BONUS_CANCEL, $bonusEvent);
+
+            return $bonusModel->id;
+
+        } else {
+            return false;
+        }
+
+    }
+
     public function getStafferBonuses($stafferId)
     {
-        return Bonus::find()->where(['staffer_id' => $stafferId]);
+        return Bonus::find()->where(['staffer_id' => $stafferId])->andWhere(['canceled' => null]);
     }
 
 }
