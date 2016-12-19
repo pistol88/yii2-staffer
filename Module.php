@@ -21,6 +21,11 @@ class Module extends \yii\base\Module
     public $defaultRole = 'staffer';
     public $salaryCashbox = 1; // id зарплатной кассы
 
+    public $salaryPeriodDayStart = '01';
+    public $salaryPeriodDayStop = 15;
+    
+    public $sessionReportUrl = '/service/report/index';
+    
     public function init()
     {
         parent::init();

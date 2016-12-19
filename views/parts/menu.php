@@ -16,6 +16,10 @@ use yii\bootstrap\Nav;
                 'label' => 'Штрафы',
                 'url' => ['/staffer/fine/index'],
             ],
+            [
+                'label' => 'Зарплаты',
+                'url' => ['/staffer/salary/index'],
+            ],
         ],
         'options' => ['class' =>'nav-pills'],
     ]); ?>

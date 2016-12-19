@@ -121,6 +121,15 @@ class Staffer extends \yii\db\ActiveRecord
         return $this->hasMany(Salary::className(), ['worker_id' => 'id']);
     }
     
+    public function getSalaryBySessionId($sessionId)
+    {
+        if($salary = $this->getSalary()->where(['session_id' => $sessionId])->one()) {
+            return $salary->salary;
+        }
+        
+        return 0;
+    }
+    
     public function getCategory()
     {
         return $this->hasOne(Category::className(), ['id' => 'category_id']);

@@ -27,9 +27,9 @@ if($dateStop = yii::$app->request->get('date_stop')) {
 }
 
 ?>
-<div class="worker-payments-widget">
+<div class="worker-payments-widget" id="worker-payments-widget">
 
-    <?php Pjax::begin(); ?>
+    <?php //Pjax::begin(); ?>
 
     <div class="filter">
         <div class="panel panel-primary">
@@ -38,6 +38,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
             </div>
             <div class="panel-body">
                 <form action="" class="row search" data-pjax="true">
+                    <input type="hidden" name="id" value="<?=(int)yii::$app->request->get('id');?>" />
                     <div class="col-md-4">
                         <div class="row">
                             <div class="col-md-6">
@@ -97,9 +98,9 @@ if($dateStop = yii::$app->request->get('date_stop')) {
     <div class="summary">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Итого</h3>
+                <h3 class="panel-title"><a href="#" onclick="$('#show-salary-summary').toggle(); return false;">Итого...</a></h3>
             </div>
-            <div class="panel-body">
+            <div class="panel-body" id="show-salary-summary" style="display: none;">
                 <?php if (count($models) > 0) {
                     if(!($fix = $worker->fix)) {
                         $fix = 0;
@@ -238,7 +239,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
 <form class="worker_salary_mass" action="<?=Url::toRoute(['/staffer/payment/add-period-ajax']);?>" method="post">
     <input type="hidden" name="stafferId" value="<?=$model->worker_id;?>" />
 
-    <table class="table table-bordered">
+    <table class="table table-bordered" id="salaryTable">
         <tr>
             <th>
                 Дата смены
@@ -259,7 +260,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                 Выплата
             </th>
             <th>
-                <input class="worker_salary_checkall" type="checkbox" value="1" />
+                <input <?php if(yii::$app->request->get('checkall')) echo ' checked="checked"'; ?> class="worker_salary_checkall" type="checkbox" value="1" />
             </th>
         </tr>
 
@@ -348,7 +349,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                         ?>
                     </td>
                     <td>
-                        <input class="worker_salary_check" type="checkbox" name="session[<?=$model->session->id;?>]" value="<?=$model->session->id;?>" />
+                        <input <?php if(yii::$app->request->get('checkall')) echo ' checked="checked"'; ?> class="worker_salary_check" type="checkbox" name="session[<?=$model->session->id;?>]" value="<?=$model->session->id;?>" />
                     </td>
                 </tr>
             <?php } ?>
@@ -366,7 +367,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                 </p>
             </th>
             <th>
-                <input class="worker_salary_checkall" type="checkbox" value="1" />
+                <input <?php if(yii::$app->request->get('checkall')) echo ' checked="checked"'; ?> class="worker_salary_checkall" type="checkbox" value="1" />
             </th>
         </tr>
     </table>
@@ -379,6 +380,6 @@ if($dateStop = yii::$app->request->get('date_stop')) {
         'pagination'=>$dataProvider->pagination,
     ]); ?>
 
-    <?php Pjax::end(); ?>
+    <?php //Pjax::end(); ?>
     
 </div>
