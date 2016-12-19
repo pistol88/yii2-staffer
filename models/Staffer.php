@@ -123,8 +123,8 @@ class Staffer extends \yii\db\ActiveRecord
     
     public function getSalaryBySessionId($sessionId)
     {
-        if($salary = $this->getSalary()->where(['session_id' => $sessionId])->one()) {
-            return $salary->salary;
+        if($salary = $this->getSalary()->where(['session_id' => $sessionId])->count()) {
+            return $this->getSalary()->where(['session_id' => $sessionId])->sum('salary');
         }
         
         return 0;

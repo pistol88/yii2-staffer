@@ -28,7 +28,7 @@ $sessionsSum = [];
     
     
     <form action="" method="get" style="width: 300px; position: relative;">
-        <p>Выберите сессию:</p>
+        <p>Выберите день:</p>
         <?= DatePicker::widget([
             'name' => 'date',
             'addon' => false,
@@ -62,7 +62,7 @@ $sessionsSum = [];
         <a href="#" class="btn btn-submit" onclick="pistol88.staffer.callPrint('worker-sapary-container'); return false;" style="float: right;"><i class="glyphicon glyphicon-print"></i></a>
         
         <div style="width: 100%; overflow-x: scroll;">
-            <table class="table workers-salary" id="workers-salary">
+            <table class="table table-bordered table-striped workers-salary" id="workers-salary">
                 <tr>
                     <th>
                         Сотрудник
