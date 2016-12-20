@@ -27,21 +27,23 @@ class SalaryController extends Controller
         ];
     }
 
-    public function actionIndex($date = null)
+    public function actionIndex($date = null, $dateStop = null)
     {
-        if(!$date) {
-            $date = date('Y-m-d');
+        if($dateStop) {
+            $dateStart  = date('Y-m-d', strtotime($date));
+            $dateStop  = date('Y-m-d', strtotime($dateStop));
         } else {
-            $date = date('Y-m-d', strtotime($date));
+            if(!$date) {
+                $date = date('Y-m-d');
+            }
+
+            $dateStart = date('Y-m-d', strtotime($date)-($this->module->salaryPeriodDays*86400));
+            $dateStop = date('Y-m-d');
         }
         
+        $sessions = yii::$app->worksess->getSessionsByDatePeriod($dateStart, $dateStop);
         $staffers = Staffer::find()->where(['status' => 'active'])->all();
         
-        $dateStart = date('Y-m-d', strtotime($date)-($this->module->salaryPeriodDays*86400));
-        $dateStop = $date;
-        
-        $sessions = yii::$app->worksess->getSessionsByDatePeriod($dateStart, $dateStop);
-
         return $this->render('index', [
             'dateStart' => $dateStart,
             'dateStop' => $dateStop,

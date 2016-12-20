@@ -27,32 +27,59 @@ $sessionsSum = [];
     
     
     
-    <form action="" method="get" style="width: 300px; position: relative;">
-        <p>Выберите день:</p>
-        <?= DatePicker::widget([
-            'name' => 'date',
-            'addon' => false,
-            'value' => $dateStop,
-            'size' => 'sm',
-            'language' => 'ru',
-            'options' => [
-                'onchange' => '',
-            ],
-            'clientEvents' => [
-                'dp.change' => new \yii\web\JsExpression("function () { $(this).parents('form').submit(); return false; }"),
-            ],
-            'placeholder' => 'На дату...',
-            'clientOptions' => [
-                'format' => 'L',
-                'minDate' => '2015-01-01',
-                'maxDate' => date('Y-m-d'),
-            ],
-            'dropdownItems' => [
-                ['label' => 'Yesterday', 'url' => '#', 'value' => \Yii::$app->formatter->asDate('-1 day')],
-                ['label' => 'Tomorrow', 'url' => '#', 'value' => \Yii::$app->formatter->asDate('+1 day')],
-                ['label' => 'Some value', 'url' => '#', 'value' => 'Special value'],
-            ],
-        ]);?>
+    <form action="" method="get">
+        <p>Выберите период:</p>
+        <div class="row">
+            <div class="col-md-4">
+                <?= DatePicker::widget([
+                    'name' => 'date',
+                    'addon' => false,
+                    'value' => $dateStart,
+                    'size' => 'sm',
+                    'language' => 'ru',
+                    'options' => [
+                        'onchange' => '',
+                    ],
+                    'placeholder' => 'На дату...',
+                    'clientOptions' => [
+                        'format' => 'L',
+                        'minDate' => '2015-01-01',
+                        'maxDate' => date('Y-m-d'),
+                    ],
+                    'dropdownItems' => [
+                        ['label' => 'Yesterday', 'url' => '#', 'value' => \Yii::$app->formatter->asDate('-1 day')],
+                        ['label' => 'Tomorrow', 'url' => '#', 'value' => \Yii::$app->formatter->asDate('+1 day')],
+                        ['label' => 'Some value', 'url' => '#', 'value' => 'Special value'],
+                    ],
+                ]);?>
+            </div>
+            <div class="col-md-4">
+                <?= DatePicker::widget([
+                    'name' => 'dateStop',
+                    'addon' => false,
+                    'value' => $dateStop,
+                    'size' => 'sm',
+                    'language' => 'ru',
+                    'options' => [
+                        'onchange' => '',
+                    ],
+                    'placeholder' => 'На дату...',
+                    'clientOptions' => [
+                        'format' => 'L',
+                        'minDate' => '2015-01-01',
+                        'maxDate' => date('Y-m-d'),
+                    ],
+                    'dropdownItems' => [
+                        ['label' => 'Yesterday', 'url' => '#', 'value' => \Yii::$app->formatter->asDate('-1 day')],
+                        ['label' => 'Tomorrow', 'url' => '#', 'value' => \Yii::$app->formatter->asDate('+1 day')],
+                        ['label' => 'Some value', 'url' => '#', 'value' => 'Special value'],
+                    ],
+                ]);?>
+            </div>
+            <div class="col-md-4">
+                <input type="submit" value="Применить" class="btn btn=submit" />
+            </div>
+        </div>
     </form>
     
     <div id="worker-sapary-container">
