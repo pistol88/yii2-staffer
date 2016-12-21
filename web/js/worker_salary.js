@@ -4,11 +4,11 @@ if (typeof halumein == "undefined" || !halumein) {
 halumein.worker_salary = {
     init: function() {
         $('.worker_salary_checkall').on('click', this.checkSalary);
-        $('.worker_salary_check').on('click', this.checkOneSalary);
+        $('.worker_salary_check').on('click', this.calculateSalary);
         $('.worker_salary_mass').on('submit', this.salaryMass);
-        this.checkOneSalary();
+        this.calculateSalary();
     },
-    checkOneSalary: function() {
+    calculateSalary: function() {
         var sum = 0;
         $('.worker_salary_check').each(function(i, el) {
             if($(el).prop('checked')) {
@@ -24,6 +24,8 @@ halumein.worker_salary = {
         else {
             $('.worker_salary_check,.worker_salary_checkall').prop('checked', false);
         }
+        
+        halumein.worker_salary.calculateSalary();
     },
     salaryMass: function() {
         var form = $(this);
