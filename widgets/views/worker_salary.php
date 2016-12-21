@@ -349,6 +349,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                         ?>
                     </td>
                     <td>
+                        <input type="hidden" name="allSessions[<?=$model->session->id;?>]" value="<?=($model->salary - $payed);?>" />
                         <input <?php if(yii::$app->request->get('checkall')) echo ' checked="checked"'; ?> class="worker_salary_check" type="checkbox" name="session[<?=$model->session->id;?>]" value="<?=$model->session->id;?>" />
                     </td>
                 </tr>
@@ -364,6 +365,11 @@ if($dateStop = yii::$app->request->get('date_stop')) {
             <th>
                 <p align="right">
                     <input class="btn btn-success" type="submit" name="payment" value="Выплатить отмеченные" style="font-size: 12px; padding: 2px;" />
+                </p>
+                <p align="right">
+                    Или введите сумму вылаты:<br />
+                    <input type="text" name="sumToSalary" value="" style="width: 70px;" />
+                    <input class="btn btn-success" type="submit" name="spread" value="Распределить" style="font-size: 12px; padding: 2px;" />
                 </p>
             </th>
             <th>

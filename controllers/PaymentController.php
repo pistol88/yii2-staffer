@@ -43,20 +43,62 @@ class PaymentController extends Controller
         $data = yii::$app->request->post();
 
         $stafferId = $data['stafferId'];
-        $sessions = $data['session'];
         
         $status = 'fail';
-        
-        foreach($sessions as $key => $sessionId) {
-            $sum = $data['sum'][$sessionId];
-            $paymentId = Yii::$app->staffer->addPayment($stafferId, $sum, $sessionId);
 
-            if ($paymentId) {
+        if($data['sumToSalary'] > 0) {
+            $sessions = $data['allSessions'];
+            $salarySum = $data['sumToSalary'];
+            if($salarySum > 0) {
+                $uselessPull = [];
+                
+                foreach($sessions as $sessionId => $sum) {
+                    if($salarySum > 0 && $sum > 0) {
+                        if($sum >= $salarySum) {
+                            $paymentId = Yii::$app->staffer->addPayment($stafferId, $salarySum, $sessionId);
+                            $salarySum = $salarySum-$sum;
+                        } else {
+                            $uselessPull[$sessionId] = $sum;
+                        }
+                    } else {
+                        $uselessPull[$sessionId] = $sum;
+                    }
+                }
+                
+                if($salarySum > 0) {
+                    foreach($uselessPull as $sessionId => $sum) {
+                        if($salarySum > 0 && $sum > 0) {
+                            if($salarySum < $sum) {
+                                $paymentId = Yii::$app->staffer->addPayment($stafferId, $salarySum, $sessionId);
+                                $salarySum = 0;
+                            } else {
+                                $paymentId = Yii::$app->staffer->addPayment($stafferId, $sum, $sessionId);
+                                $salarySum = $salarySum-$sum;
+                            }
+                        }
+                    }
+                }
+                
+                if($salarySum > 0) {
+                    Yii::$app->staffer->addBonus($stafferId, $salarySum, 'Распределение суммы ЗП '.date('d.m.Y H:i'));
+                }
+                
                 $status = 'success';
-            } else {
-                return [
-                    'status' => 'error'
-                ];
+            }
+        } elseif($data['session']) {
+            $sessions = $data['session'];
+
+            foreach($sessions as $key => $sessionId) {
+                $sum = $data['sum'][$sessionId];
+                $paymentId = Yii::$app->staffer->addPayment($stafferId, $sum, $sessionId);
+
+                if ($paymentId) {
+                    $status = 'success';
+                } else {
+                    return json_encode([
+                        'status' => 'error'
+                    ]);
+                }
             }
         }
         
