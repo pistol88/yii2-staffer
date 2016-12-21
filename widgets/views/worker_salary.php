@@ -350,13 +350,15 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                     </td>
                     <td>
                         <input type="hidden" name="allSessions[<?=$model->session->id;?>]" value="<?=($model->salary - $payed);?>" />
-                        <input <?php if(yii::$app->request->get('checkall')) echo ' checked="checked"'; ?> class="worker_salary_check" type="checkbox" name="session[<?=$model->session->id;?>]" value="<?=$model->session->id;?>" />
+                        <input <?php if(yii::$app->request->get('checkall')) echo ' checked="checked"'; ?> class="worker_salary_check" type="checkbox" name="session[<?=$model->session->id;?>]" value="<?=($model->salary - $payed);?>" />
                     </td>
                 </tr>
             <?php } ?>
          <?php } ?>
          <tr>
-            <th colspan="4" style="text-align: right;">Итого</th>
+            <th colspan="2" style="text-align: right;">Итого</th>
+            <th><?=$totalBaseSalary;?></th>
+            <th><?=$totalPayed;?></th>
             <th>
                 <p>
                     <?= number_format(($totalSalary - $totalPayed), 2, ',', ' ') ?>
@@ -364,12 +366,19 @@ if($dateStop = yii::$app->request->get('date_stop')) {
             </th>
             <th>
                 <p align="right">
+                    Отмечено: <span id="hechedSalary">0</span>
+                    <br />
                     <input class="btn btn-success" type="submit" name="payment" value="Выплатить отмеченные" style="font-size: 12px; padding: 2px;" />
                 </p>
                 <p align="right">
-                    Или введите сумму вылаты:<br />
-                    <input type="text" name="sumToSalary" value="" style="width: 70px;" />
-                    <input class="btn btn-success" type="submit" name="spread" value="Распределить" style="font-size: 12px; padding: 2px;" />
+                    Или:<br />
+                    <div class="input-group" style="display: block; float: right;">
+                        <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
+                        <?=Html::input('text', 'sumToSalary', '', ['class' => 'form-control', 'placeholder' => 'Сумма', 'style' => 'width: 100px;']) ?>
+                        <span class="input-group-btn">
+                            <?= Html::submitButton('<i class="glyphicon glyphicon-ok"></i>', ['title' => 'Распределить', 'class' => 'btn btn-success promo-code-enter-btn']) ?>
+                        </span>
+                    </div>
                 </p>
             </th>
             <th>

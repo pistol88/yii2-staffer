@@ -88,7 +88,7 @@ class PaymentController extends Controller
         } elseif($data['session']) {
             $sessions = $data['session'];
 
-            foreach($sessions as $key => $sessionId) {
+            foreach($sessions as $sessionId => $sum) {
                 $sum = $data['sum'][$sessionId];
                 $paymentId = Yii::$app->staffer->addPayment($stafferId, $sum, $sessionId);
 
