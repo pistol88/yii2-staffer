@@ -11,6 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
 \pistol88\staffer\assets\BackendAsset::register($this);
 
 $sessionsSum = [];
+$lastSessionStop = [];
 
 ?>
 <div class="model-index container-full">
@@ -96,7 +97,7 @@ $sessionsSum = [];
                     </th>
 
                     <?php foreach($sessions as $session) { ?>
-                        <th><a href="<?=Url::toRoute([$module->sessionReportUrl, 'sessionId' => $session->id]);?>" title="<?=date('d.m.Y', $session->start_timestamp);?> <?=$session->shift;?>"><?=date('d', $session->start_timestamp);?></a></th>
+                        <th><a href="<?=Url::toRoute([$module->sessionReportUrl, 'sessionId' => $session->id]);?>" title="<?=date('d.m.Y', $session->start_timestamp);?> <?=$session->shift;?> - <?=date('d.m.Y H:i:s', $session->stop_timestamp);?>"><?=date('d', $session->start_timestamp);?></a></th>
                     <?php } ?>
                     
                     <th>
@@ -123,14 +124,14 @@ $sessionsSum = [];
                             <?php } else { ?>
                                 <td>-</td>
                             <?php } ?>
-                        <?php } ?>
+                        <?php $lastSessionStop[$staffer->id] = date('d.m.Y', $session->stop_timestamp); } ?>
                         <th>
                             <p>
                                 <?=$totalSum;?>
                             </p>
                         </th>
                         <td>
-                            <a href="<?=Url::toRoute(['/staffer/staffer/view', 'id' => $staffer->id, 'date_start' => $dateStart, 'date_stop' => $dateStop, 'checkall' => 1]);?>#salaryTable" class="btn btn-success" title="Выплатить">
+                            <a href="<?=Url::toRoute(['/staffer/staffer/view', 'id' => $staffer->id, 'date_start' => $dateStart, 'date_stop' => $lastSessionStop[$staffer->id], 'checkall' => 1]);?>#salaryTable" class="btn btn-success" title="Выплатить">
                                 <i class="glyphicon glyphicon-check"></i>
                             </a>
                         </td>

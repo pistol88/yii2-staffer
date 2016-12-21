@@ -357,7 +357,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
          <?php } ?>
          <tr>
             <th colspan="2" style="text-align: right;">Итого</th>
-            <th><?=$totalBaseSalary;?></th>
+            <th><?=$totalSalary;?></th>
             <th><?=$totalPayed;?></th>
             <th>
                 <p>
@@ -376,7 +376,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                         <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
                         <?=Html::input('text', 'sumToSalary', '', ['class' => 'form-control', 'placeholder' => 'Сумма', 'style' => 'width: 100px;']) ?>
                         <span class="input-group-btn">
-                            <?= Html::submitButton('<i class="glyphicon glyphicon-ok"></i>', ['title' => 'Распределить', 'class' => 'btn btn-success promo-code-enter-btn']) ?>
+                            <?= Html::submitButton('<i class="glyphicon glyphicon-ok"></i>', ['title' => 'Распределить', 'class' => 'btn btn-success']) ?>
                         </span>
                     </div>
                 </p>

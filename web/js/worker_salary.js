@@ -5,7 +5,8 @@ halumein.worker_salary = {
     init: function() {
         $('.worker_salary_checkall').on('click', this.checkSalary);
         $('.worker_salary_check').on('click', this.checkOneSalary);
-        $('.worker_salary_mass').on('submit', this.salaryMass)
+        $('.worker_salary_mass').on('submit', this.salaryMass);
+        this.checkOneSalary();
     },
     checkOneSalary: function() {
         var sum = 0;
