@@ -9,39 +9,43 @@ use pistol88\staffer\models\Staffer;
 use kartik\select2\Select2;
 ?>
 <div class="add-fine-widget">
-    
-    <?php Modal::begin([
-        'header' => '<h2>Добавить</h2>',
-        'toggleButton' => ['class' => 'btn btn-success', 'label' => 'Добавить'],
-    ]);
-    ?>
 
-    <?php $form = ActiveForm::begin(['action' => ['/staffer/fine/ajax-create'], 'options' => ['enctype' => 'multipart/form-data']]); ?>
-        <div class="col-md-6">
-            <?= $form->field($model, 'reason')
-                ->widget(Select2::classname(), [
-                    'data' => $module->fineReasons,
-                    'language' => 'ru',
-                    'options' => ['placeholder' => 'Выберите причину ...'],
-                    'pluginOptions' => [
-                        'allowClear' => true
-                    ],
-                ]); ?>
-        </div>
-        <div class="col-md-6">
-            <?= $form->field($model, 'sum')->textInput() ?>
+    <?php if ($userOnSession) { ?>
+        <?php Modal::begin([
+            'header' => '<h2>Добавить</h2>',
+            'toggleButton' => ['class' => 'btn btn-success', 'label' => 'Добавить'],
+        ]);
+        ?>
 
-            <?= $form->field($model, 'comment')->textArea() ?>
-        </div>
+        <?php $form = ActiveForm::begin(['action' => ['/staffer/fine/ajax-create'], 'options' => ['enctype' => 'multipart/form-data']]); ?>
+            <div class="col-md-6">
+                <?= $form->field($model, 'reason')
+                    ->widget(Select2::classname(), [
+                        'data' => $module->fineReasons,
+                        'language' => 'ru',
+                        'options' => ['placeholder' => 'Выберите причину ...'],
+                        'pluginOptions' => [
+                            'allowClear' => true
+                        ],
+                    ]); ?>
+            </div>
+            <div class="col-md-6">
+                <?= $form->field($model, 'sum')->textInput() ?>
 
-        <div class="form-group">
-            <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Изменить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-            <?= $form->field($model, 'staffer_id')->label(false)->textInput(['value' => $staffer->id, 'type' => 'hidden']) ?>
-        </div>
-    <?php ActiveForm::end(); ?>
-    
-    <?php Modal::end(); ?>
-    
+                <?= $form->field($model, 'comment')->textArea() ?>
+            </div>
+
+            <div class="form-group">
+                <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Изменить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+                <?= $form->field($model, 'staffer_id')->label(false)->textInput(['value' => $staffer->id, 'type' => 'hidden']) ?>
+            </div>
+        <?php ActiveForm::end(); ?>
+
+        <?php Modal::end(); ?>
+    <?php } else { ?>
+        <p>Не на смене</p>
+    <?php } ?>
+
     <?php Pjax::begin(); ?>
 
     <a href="" class="add-fine-update"> </a>

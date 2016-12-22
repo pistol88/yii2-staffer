@@ -124,7 +124,7 @@ $lastSessionStop = [];
                             <?php } else { ?>
                                 <td>-</td>
                             <?php } ?>
-                        <?php $lastSessionStop[$staffer->id] = date('d.m.Y', $session->stop_timestamp); } ?>
+                        <?php if($session->stop_timestamp) $lastSessionStop[$staffer->id] = date('d.m.Y', $session->stop_timestamp); } ?>
                         <th>
                             <p>
                                 <?=$totalSum;?>

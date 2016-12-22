@@ -17,14 +17,26 @@ class AddBonus extends \yii\base\Widget
         return parent::init();
     }
 
+
+
     public function run()
     {
         $model = new Bonus;
 
-        return $this->render('add_bonus', [
-            'module' => yii::$app->getModule('staffer'),
-            'model' => $model,
-            'staffer' => $this->staffer,
-        ]);
+        $userOnSession = false;
+        if (\Yii::$app->has('worksess') && $session = yii::$app->worksess->soon()) {
+            $userOnSession = $session->getOpenedUserSessions()->andWhere(['user_id' => $this->staffer->id])->all();
+        }
+
+        if ($userOnSession) {
+            return $this->render('add_bonus', [
+                'module' => yii::$app->getModule('staffer'),
+                'model' => $model,
+                'staffer' => $this->staffer,
+            ]);
+        } else {
+            return "<p>Не на смене</p>";
+        }
+
     }
 }
