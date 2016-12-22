@@ -20,14 +20,22 @@ class AddDebt extends \yii\base\Widget
     {
         $model = new DebtTransactions;
         $sessionId = 0;
+        $userOnSession = false;
         if (\Yii::$app->has('worksess') && $session = yii::$app->worksess->soon()) {
             $sessionId = $session->id;
+            $userOnSession = $session->getOpenedUserSessions()->andWhere(['user_id' => $this->worker->id])->all();
         }
 
-        return $this->render('add_debt', [
-            'model' => $model,
-            'sessionId' => $sessionId,
-            'staffer' => $this->worker,
-        ]);
+        if ($userOnSession) {
+            return $this->render('add_debt', [
+                'model' => $model,
+                'sessionId' => $sessionId,
+                'staffer' => $this->worker,
+            ]);
+        } else {
+            return "<p>Не на смене</p>";
+        }
+
+
     }
 }
