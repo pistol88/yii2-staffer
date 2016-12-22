@@ -71,7 +71,7 @@ use kartik\select2\Select2;
     <div class="row">
         <div class="col-md-3 col-xs-6">
             <?php if(yii::$app->has('organization') && $organization = yii::$app->get('organization')) { ?>
-                <?php echo $form->field($model, 'organization_id')->dropDownList(array_merge(['' => 'Нет'], ArrayHelper::map($organization->getList(), 'id', 'name'))) ?>
+                <?php echo $form->field($model, 'organization_id')->dropDownList(ArrayHelper::map($organization->getList(), 'id', 'name'), ['prompt' => 'Нет']) ?>
             <?php } ?>
         </div>
     </div>
