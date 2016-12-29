@@ -99,9 +99,14 @@ $lastSessionStop = [];
                     <?php foreach($sessions as $session) { ?>
                         <th><a href="<?=Url::toRoute([$module->sessionReportUrl, 'sessionId' => $session->id]);?>" title="<?=date('d.m.Y', $session->start_timestamp);?> <?=$session->shift;?> - <?=date('d.m.Y H:i:s', $session->stop_timestamp);?>"><?=date('d', $session->start_timestamp);?></a></th>
                     <?php } ?>
-                    
                     <th>
-                        Итого
+                        Итого<br />начислено
+                    </th>
+                    <th>
+                        Итого<br /> выплачено
+                    </th>
+                    <th>
+                        Остаток
                     </th>
                     <th>
                         
@@ -109,12 +114,18 @@ $lastSessionStop = [];
                 </tr>
                 
                 <?php foreach($staffers as $staffer) { ?>
-                    <?php $totalSum = 0; ?>
+                    <?php
+                    $totalSum = 0;
+                    $paymentsSum = 0;
+                    ?>
                     <tr class="staffer_salary_<?=$staffer->id;?>">
                         <td>
                             <strong><a href="<?=Url::toRoute(['/staffer/staffer/view', 'id' => $staffer->id, 'date_start' => $dateStart, 'date_stop' => $dateStop]);?>"><?=$staffer->name;?></a></strong>
                         </td>
                         <?php foreach($sessions as $session) { ?>
+                            <?php
+                            $paymentsSum += (int)yii::$app->staffer->getStafferPaymentsBySession($staffer->id, $session->id)->sum('sum');
+                            ?>
                             <?php if($sum = $staffer->getSalaryBySessionId($session->id)) { ?>
                                 <?php
                                 $totalSum += $sum;
@@ -131,10 +142,19 @@ $lastSessionStop = [];
                             </p>
                         </th>
                         <td>
+                            <p>
+                                <?=$paymentsSum;?>
+                            </p>
+                        </td>
+                        <td>
+                            <?=($totalSum-$paymentsSum);?>
+                        </td>
+                        <td>
                             <a href="<?=Url::toRoute(['/staffer/staffer/view', 'id' => $staffer->id, 'date_start' => $dateStart, 'date_stop' => $lastSessionStop[$staffer->id], 'checkall' => 1]);?>#salaryTable" class="btn btn-success" title="Выплатить">
                                 <i class="glyphicon glyphicon-check"></i>
                             </a>
                         </td>
+
                     </tr>
                     <?php if(!$totalSum) { ?>
                     <style>
