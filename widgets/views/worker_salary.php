@@ -260,7 +260,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                 Выплата
             </th>
             <th>
-                <input <?php if(yii::$app->request->get('checkall')) echo ' checked="checked"'; ?> class="worker_salary_checkall" type="checkbox" value="1" />
+                <input <?php if(true) echo ' checked="checked"'; ?> class="worker_salary_checkall" type="checkbox" value="1" />
             </th>
         </tr>
 
@@ -350,7 +350,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                     </td>
                     <td>
                         <input type="hidden" name="allSessions[<?=$model->session->id;?>]" value="<?=($model->salary - $payed);?>" />
-                        <input <?php if(yii::$app->request->get('checkall')) echo ' checked="checked"'; ?> class="worker_salary_check" type="checkbox" name="session[<?=$model->session->id;?>]" value="<?=($model->salary - $payed);?>" />
+                        <input <?php if(true) echo ' checked="checked"'; ?> class="worker_salary_check" type="checkbox" name="session[<?=$model->session->id;?>]" value="<?=($model->salary - $payed);?>" />
                     </td>
                 </tr>
             <?php } ?>
@@ -382,7 +382,7 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                 </p>
             </th>
             <th>
-                <input <?php if(yii::$app->request->get('checkall')) echo ' checked="checked"'; ?> class="worker_salary_checkall" type="checkbox" value="1" />
+                <input <?php if(true) echo ' checked="checked"'; ?> class="worker_salary_checkall" type="checkbox" value="1" />
             </th>
         </tr>
     </table>
