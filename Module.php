@@ -27,6 +27,8 @@ class Module extends \yii\base\Module
     
     public function init()
     {
+        $model = yii::$app->user->getIdentity()->attachBehavior('tasks', 'pistol88\staffer\behaviors\UserStaffer');
+        
         parent::init();
     }
 
