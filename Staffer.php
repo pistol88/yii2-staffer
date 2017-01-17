@@ -206,4 +206,8 @@ class Staffer extends Component
         return Bonus::find()->where(['staffer_id' => $stafferId])->andWhere(['canceled' => null]);
     }
 
+    public function get($id)
+    {
+        return $this->finder->where(['id' => $id])->one();
+    }
 }

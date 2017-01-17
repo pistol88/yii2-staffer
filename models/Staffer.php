@@ -100,6 +100,13 @@ class Staffer extends \yii\db\ActiveRecord
         return $this->name;
     }
     
+    public function getUser()
+    {
+        $userModel = yii::$app->user->identityClass;
+        
+        return $userModel::find()->where(['id' => $this->user_id]);
+    }
+    
     public function setSalary($sessionId, $charged, $salary, $fines = 0, $bonuses = 0)
     {
         $salaryModel = new Salary;
@@ -139,5 +146,15 @@ class Staffer extends \yii\db\ActiveRecord
         parent::afterSave($insert, $changedAttributes);
      
         yii::$app->getModule('staffer')->registerUser($this);
+    }
+    
+    public function getEmail()
+    {
+        return null;
+    }
+    
+    public function getAvatar()
+    {
+        return null;
     }
 }

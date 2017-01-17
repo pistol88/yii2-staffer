@@ -237,7 +237,9 @@ if($dateStop = yii::$app->request->get('date_stop')) {
     </div>
     
 <form class="worker_salary_mass" action="<?=Url::toRoute(['/staffer/payment/add-period-ajax']);?>" method="post">
-    <input type="hidden" name="stafferId" value="<?=$model->worker_id;?>" />
+    <?php if(isset($model)) { ?>
+        <input type="hidden" name="stafferId" value="<?=$model->worker_id;?>" />
+    <?php } ?>
 
     <table class="table table-bordered" id="salaryTable">
         <tr>
@@ -355,36 +357,40 @@ if($dateStop = yii::$app->request->get('date_stop')) {
                 </tr>
             <?php } ?>
          <?php } ?>
-         <tr>
-            <th colspan="2" style="text-align: right;">Итого</th>
-            <th><?=$totalSalary;?></th>
-            <th><?=$totalPayed;?></th>
-            <th>
-                <p>
-                    <?= number_format(($totalSalary - $totalPayed), 2, ',', ' ') ?>
-                </p>
-            </th>
-            <th>
-                <p align="right">
-                    Отмечено: <span id="hechedSalary">0</span>
-                    <br />
-                    <input class="btn btn-success" type="submit" name="payment" value="Выплатить отмеченные" style="font-size: 12px; padding: 2px;" />
-                </p>
-                <p align="right">
-                    Или:<br />
-                    <div class="input-group" style="display: block; float: right;">
-                        <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
-                        <?=Html::input('text', 'sumToSalary', '', ['class' => 'form-control', 'placeholder' => 'Сумма', 'style' => 'width: 100px;']) ?>
-                        <span class="input-group-btn">
-                            <?= Html::submitButton('<i class="glyphicon glyphicon-ok"></i>', ['title' => 'Распределить', 'class' => 'btn btn-success']) ?>
-                        </span>
-                    </div>
-                </p>
-            </th>
-            <th>
-                <input <?php if(true) echo ' checked="checked"'; ?> class="worker_salary_checkall" type="checkbox" value="1" />
-            </th>
-        </tr>
+         
+         <?php if(isset($totalSalary)) { ?>
+             <tr>
+                <th colspan="2" style="text-align: right;">Итого</th>
+                <th><?=$totalSalary;?></th>
+                <th><?=$totalPayed;?></th>
+                <th>
+                    <p>
+                        <?= number_format(($totalSalary - $totalPayed), 2, ',', ' ') ?>
+                    </p>
+                </th>
+                <th>
+                    <p align="right">
+                        Отмечено: <span id="hechedSalary">0</span>
+                        <br />
+                        <input class="btn btn-success" type="submit" name="payment" value="Выплатить отмеченные" style="font-size: 12px; padding: 2px;" />
+                    </p>
+                    <p align="right">
+                        Или:<br />
+                        <div class="input-group" style="display: block; float: right;">
+                            <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
+                            <?=Html::input('text', 'sumToSalary', '', ['class' => 'form-control', 'placeholder' => 'Сумма', 'style' => 'width: 100px;']) ?>
+                            <span class="input-group-btn">
+                                <?= Html::submitButton('<i class="glyphicon glyphicon-ok"></i>', ['title' => 'Распределить', 'class' => 'btn btn-success']) ?>
+                            </span>
+                        </div>
+                    </p>
+                </th>
+                <th>
+                    <input <?php if(true) echo ' checked="checked"'; ?> class="worker_salary_checkall" type="checkbox" value="1" />
+                </th>
+            </tr>
+         <?php } ?>
+
     </table>
     <div style="float: right;">
        
