@@ -33,6 +33,7 @@ class AddBonus extends \yii\base\Widget
                 'module' => yii::$app->getModule('staffer'),
                 'model' => $model,
                 'staffer' => $this->staffer,
+                'sessionId' => $session->id
             ]);
         } else {
             return "<p>Не на смене</p>";
