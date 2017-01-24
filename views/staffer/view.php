@@ -90,4 +90,9 @@ $this->params['breadcrumbs'][] = 'Просмотр';
             </div>
         <?php } ?>
     </div>
+    <div class="row text-right">
+        <div class="col-sm-12">
+            <a href="<?= Url::to(['/staffer/salary/index']); ?>">Перейти на зарплатную ведомость</a>   
+        </div>
+    </div>
 </div>
