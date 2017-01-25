@@ -35,7 +35,7 @@ class AddPayment extends \yii\base\Widget
                                     ->orderBy(['date' => SORT_DESC])
                                     ->one();
 
-        if ($debts && $debts != 0) {
+        if ($debts) {
             $debt = $debts->balance;
         }
 
