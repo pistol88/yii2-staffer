@@ -66,8 +66,6 @@ class StafferController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $module = $this->module;
-
             return $this->redirect(['update', 'id' => $model->id]);
         } else {
             return $this->render('update', ['model' => $model, 'module' => $this->module]);

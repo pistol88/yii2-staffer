@@ -18,7 +18,7 @@ class Salary extends \yii\db\ActiveRecord
             [['worker_id', 'session_id', 'date', 'salary', 'charged'], 'required'],
             [['worker_id', 'session_id', 'date_timestamp'], 'integer'],
             [['date'], 'string'],
-            //[['charged', 'salary', 'bonuses', 'fines', 'fix', 'charged'], 'double'],
+            [['charged', 'salary', 'bonuses', 'fines', 'fix', 'charged'], 'double'],
         ];
     }
 
@@ -46,5 +46,10 @@ class Salary extends \yii\db\ActiveRecord
     public function getWorker()
     {
         return $this->hasOne(Staffer::className(), ['id' => 'worker_id']);
+    }
+    
+    public function getStaffer()
+    {
+        return $this->getWorker();
     }
 }

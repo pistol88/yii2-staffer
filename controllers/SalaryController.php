@@ -3,8 +3,7 @@ namespace pistol88\staffer\controllers;
 
 use Yii;
 use pistol88\staffer\models\Staffer;
-use pistol88\staffer\models\Payment;
-use pistol88\staffer\models\category\PaymentSearch;
+use pistol88\staffer\models\Salary;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -51,5 +50,25 @@ class SalaryController extends Controller
             'sessions' => $sessions,
             'module' => $this->module,
         ]);
+    }
+    
+    public function actionUpdate($sessionId, $stafferId)
+    {
+        $model = Salary::find()->where(['session_id' => $sessionId, 'worker_id' => $stafferId])->one();
+
+        if(!$model) {
+            throw new NotFoundHttpException('The requested salary does not exist.');
+        }
+        
+        $module = $this->module;
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->salary = $model->charged+$model->fix+$model->bonuses-$model->fines;
+            $model->save(false);
+            
+            return $this->redirect(yii::$app->request->referrer);
+        } else {
+            return $this->render('update', ['model' => $model, 'module' => $this->module]);
+        }
     }
 }
