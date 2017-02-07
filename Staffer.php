@@ -39,7 +39,7 @@ class Staffer extends Component
         return $this->finder->one();
     }
 
-    public function addPayment($workerId, $sum, $sessionId)
+    public function addPayment($workerId, $sum, $sessionId, $orderId = null)
     {
         $payment = new Payment;
         $payment->worker_id = $workerId;
@@ -48,6 +48,7 @@ class Staffer extends Component
         $payment->user_id = Yii::$app->user->id;
         $payment->date = date('Y-m-d H:i:s');
         $payment->date_timestamp = time();
+        $payment->order_id = $orderId;
 
         if($payment->validate() && $payment->save()) {
 
