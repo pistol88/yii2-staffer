@@ -129,7 +129,12 @@ $lastSessionStop = [];
                             <?php if($sum = $staffer->getSalaryBySessionId($session->id)) { ?>
                                 <?php
                                 $totalSum += $sum;
-                                $sessionsSum[$session->id] += $sum;
+                                if(!isset($sessionsSum[$session->id])) {
+                                    $sessionsSum[$session->id] = $sum;
+                                } else {
+                                    $sessionsSum[$session->id] += $sum;
+                                }
+                                
                                 ?>
                                 <td><?=$sum;?></td>
                             <?php } else { ?>
@@ -169,7 +174,7 @@ $lastSessionStop = [];
                 <tr>
                     <th>Итого</th>
                     <?php foreach($sessions as $session) { ?>
-                        <td><?=$sessionsSum[$session->id];?></td>
+                        <td><?php if(isset($sessionsSum[$session->id])) echo $sessionsSum[$session->id];?></td>
                     <?php } ?>
                     <th><?=array_sum($sessionsSum);?></th>
                     <td></td>
