@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160728_081813444_Mass extends Migration {
+class m160728_121212_Mass extends Migration {
 
     public function safeUp() {
         if ($this->db->driverName === 'mysql') {
