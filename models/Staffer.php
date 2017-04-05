@@ -145,7 +145,10 @@ class Staffer extends \yii\db\ActiveRecord
     public function afterSave($insert, $changedAttributes){
         parent::afterSave($insert, $changedAttributes);
      
-        yii::$app->getModule('staffer')->registerUser($this);
+        if(empty($this->user_id) && $userId = yii::$app->getModule('staffer')->registerUser($this)) {
+            $this->user_id = $userId;
+            $this->save(false);
+        }
     }
     
     public function getEmail()
