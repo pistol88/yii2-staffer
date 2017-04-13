@@ -101,8 +101,8 @@ use kartik\select2\Select2;
                 <div class="form-group field-user-name">
                     <label class="control-label" for="user-name">Полномочия</label>
                     <select name="user[roles][]" class="form-control" multiple>
-                        <?php foreach(yii::$app->getModule('staffer')->userRoles as $userRole) { ?>
-                            <option <?php if($userRole == yii::$app->getModule('staffer')->defaultRole) echo 'selected="selected"'; ?>><?=$userRole;?></option>
+                        <?php foreach(\Yii::$app->authManager->getRoles() as $roleId => $roleData) { ?>
+                            <option value="<?=$roleId;?>" <?php if($roleId == yii::$app->getModule('client')->defaultRole) echo 'selected="selected"'; ?>><?=$roleId;?></option>
                         <?php } ?>
                     </select>
                 </div>        
