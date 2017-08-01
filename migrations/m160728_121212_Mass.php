@@ -44,7 +44,7 @@ class m160728_121212_Mass extends Migration {
                 'id' => Schema::TYPE_PK . "",
                 'staffer_id' => Schema::TYPE_INTEGER . "(11)",
                 'reason' => Schema::TYPE_STRING . "(255) NOT NULL",
-                'sum' => Schema::TYPE_DECIMAL . "  (11, 2)",
+                'sum' => Schema::TYPE_DECIMAL . "(11,2)",
                 'comment' => Schema::TYPE_STRING . "(255)",
                 'created_at' => Schema::TYPE_DATETIME,
                 ], $tableOptions);
